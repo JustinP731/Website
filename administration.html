@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cazza Residences Dashboard</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-[#1e392a] text-white flex flex-col p-4">
+        <div class="flex items-center space-x-2 pb-1 mb-4 border-b border-gray-700">
+            <div>
+                <img src="C:\Users\jonas\Desktop\Justin\Capstone\icon\logo-removebg-preview.png" alt="img"
+                    style="width: 200px; height: 150px;">
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-grow">
+            <ul>
+                <li class="mb-2">
+                    <a href="javascript:void(0)" data-target="overview-content"
+                        class="nav-link flex items-center p-3 text-sm font-medium rounded-lg active">
+                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h6m-6 0a1 1 0 001 1h5a1 1 0 001-1m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1z" />
+                        </svg>
+                        Overview
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="javascript:void(0)" data-target="applicant-content"
+                        class="nav-link flex items-center p-3 text-sm font-medium rounded-lg hover:bg-[#2c4e3a] transition-colors duration-200">
+                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Applicant
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="javascript:void(0)" data-target="tenant-content"
+                        class="nav-link flex items-center p-3 text-sm font-medium rounded-lg hover:bg-[#2c4e3a] transition-colors duration-200">
+                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                        Tenant
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" data-target="list-management-content"
+                        class="nav-link flex items-center p-3 text-sm font-medium rounded-lg hover:bg-[#2c4e3a] transition-colors duration-200">
+                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        List Management
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col bg-gray-100 p-8">
+        <!-- Overview -->
+        <div id="overview-content" class="content-section">
+            <!-- Overview Header -->
+            <header class="flex justify-between items-center bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Overview</h2>
+                <div class="flex items-center space-x-4">
+                    <button class="text-[#1e392a] p-2 rounded-lg hover:bg-gray-200">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                    <div
+                        class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        A</div>
+                </div>
+            </header>
+            <!-- Cards -->
+            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-[#1e392a] text-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Applicant</h3>
+                    <div class="flex justify-between space-x-4">
+                        <div class="flex-1 bg-[#2c4e3a] p-4 rounded-lg flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-sm text-gray-300">Request</span>
+                                <span class="text-3xl font-bold">15</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-[#2c4e3a] p-4 rounded-lg flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-sm text-gray-300">Pending</span>
+                                <span class="text-3xl font-bold">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-[#1e392a] text-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">Tenant</h3>
+                    <div class="flex justify-between space-x-4">
+                        <div class="flex-1 bg-[#2c4e3a] p-4 rounded-lg flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-sm text-gray-300">Message</span>
+                                <span class="text-3xl font-bold">15</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 bg-[#2c4e3a] p-4 rounded-lg flex items-center justify-between">
+                            <div class="flex flex-col">
+                                <span class="text-sm text-gray-300">Review/Rating</span>
+                                <span class="text-3xl font-bold">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Applicant Content Section - Now hidden by default -->
+        <div id="applicant-content" class="content-section hidden">
+            <!-- Main Header Bar -->
+            <header class="flex justify-between items-center bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Applicant</h2>
+                <div class="flex items-center space-x-4">
+                    <button
+                        class="bg-[#1e392a] text-white py-2 px-4 rounded-lg text-sm font-medium shadow-md transition-colors duration-200 hover:bg-opacity-80">
+                        Create Tenant
+                    </button>
+                    <div
+                        class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        A</div>
+                </div>
+            </header>
+
+            <!-- Main Content Body - Container for the list -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                <!-- List Header - "Create Tenant +" and other controls can go here -->
+                <div class="flex justify-end items-center mb-4">
+                    <button class="flex items-center space-x-1 text-[#1e392a] text-sm font-medium">
+                        <span>Create Tenant</span>
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- List of Applicants -->
+                <div class="space-y-4">
+                    <!-- Applicant 1 Card - Now a clickable card -->
+                    <div data-target="applicant-details-content"
+                        class="applicant-card flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                        <div class="flex items-center space-x-4">
+                            <!-- Yellow Circular Avatar -->
+                            <div
+                                class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+                                A</div>
+                            <span class="text-gray-800 font-medium">Applicant 1</span>
+                        </div>
+                        <!-- Dropdown Arrow -->
+                        <button class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Applicant 2 Card - Now a clickable card -->
+                    <div data-target="applicant-details-content"
+                        class="applicant-card flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200">
+                        <div class="flex items-center space-x-4">
+                            <!-- Yellow Circular Avatar -->
+                            <div
+                                class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+                                A</div>
+                            <span class="text-gray-800 font-medium">Applicant 2</span>
+                        </div>
+                        <!-- Dropdown Arrow -->
+                        <button class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tenant Content Section - Now with the new design -->
+        <div id="tenant-content" class="content-section hidden">
+            <header class="flex justify-between items-center bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Tenant</h2>
+                <!-- Create Tenant button from the image -->
+                <button class="flex items-center space-x-1 text-[#1e392a] text-sm font-medium">
+                    <span>Create Tenant</span>
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                </button>
+            </header>
+            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                <div class="space-y-4">
+                    <!-- Tenant 1 Card -->
+                    <div
+                        class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+                                T</div>
+                            <span class="text-gray-800 font-medium">Tenant 001</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button
+                                class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z" />
+                                </svg>
+                            </button>
+                            <button
+                                class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Tenant 2 Card -->
+                    <div
+                        class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+                                T</div>
+                            <span class="text-gray-800 font-medium">Tenant 002</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button
+                                class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z" />
+                                </svg>
+                            </button>
+                            <button
+                                class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Tenant 3 Card -->
+                    <div
+                        class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+                                T</div>
+                            <span class="text-gray-800 font-medium">Tenant 003</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button
+                                class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8s-9-3.582-9-8 4.03-8 9-8 9 3.582 9 8z" />
+                                </svg>
+                            </button>
+                            <button
+                                class="p-1 rounded-full text-gray-500 hover:bg-gray-200 transition-colors duration-200">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- List Management Content Section - Initially hidden -->
+        <div id="list-management-content" class="content-section hidden">
+            <header class="flex justify-between items-center bg-white p-6 rounded-lg shadow-md mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">List Management</h2>
+            </header>
+            <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+            
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Example Room Card -->
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                        <img src="https://scontent.fmnl17-3.fna.fbcdn.net/v/t39.30808-6/515808802_733022819474478_6323715720862934383_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=aa7b47&_nc_eui2=AeHXTt4H_osBpdAc7sKNl5Ro_Qni_qGo2yT9CeL-oajbJHKMzGokM3dSpt6v7xfq0W4qKDPneEnCeU_TCAAQg9yp&_nc_ohc=hy4C7s_YDyoQ7kNvwFVi63n&_nc_oc=Adlw5myhWsE2fy0_6jDc5MIQBMzt5rKAq32J093mYQr8BxIX0x-R0cW8-B39DettVfQ&_nc_zt=23&_nc_ht=scontent.fmnl17-3.fna&_nc_gid=MdAhZ9YoUN527OKRtF33cQ&oh=00_AfURU1wcpCGjEdi0KvPEiC6UvS468Bqa3kLHM7gFSQPzfw&oe=68A24121" alt="Room 001" class="w-full h-40 object-cover">
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-semibold text-lg mb-2">Dorm Type • <span class="font-semibold">Room
+                                        001</span></h3>
+                                <p class="text-gray-700"><span class="font-semibold">Price:</span> Monthly ₱4000.00</p>
+                            </div>
+                            <p class="text-gray-700 mt-4">
+                                <span class="font-semibold">Number of Roommate:</span> 2
+                                <span class="inline-block ml-1 text-gray-500"><!-- roommate icon -->
+                                    <svg class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M16 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Applicant Details Content Section - Initially hidden -->
+            <div id="applicant-details-content" class="content-section hidden">
+                <header class="flex justify-between items-center bg-white p-6 rounded-lg shadow-md mb-6">
+                    <!-- Back button to return to the main applicant list -->
+                    <button id="back-to-applicants" class="flex items-center space-x-2 text-[#1e392a] font-semibold">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span>Back to Applicants</span>
+                    </button>
+                    <h2 class="text-3xl font-semibold text-gray-800">Applicant Details</h2>
+                </header>
+                <div class="bg-white p-6 rounded-lg shadow-md flex-1">
+                    <p>This is where the detailed information for a specific applicant will be displayed.</p>
+                </div>
+            </div>
+    </main>
+
+    
+    
+
+    <!-- Script -->
+    <script src="javasript.js"></script>
+</body>
+
+</html>
