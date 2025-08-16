@@ -31,6 +31,13 @@
   const panoBox = document.getElementById('panoViewer');
   let panoInstance = null;
 
+  // add near the top, under your other helpers
+  function absUrl(src) {
+    // robustly resolve "pngs/..." to "http://127.0.0.1:5500/public/pngs/..."
+    return new URL(src, document.baseURI).href;
+  }
+
+
   function destroyPano() {
     if (panoInstance) { try { panoInstance.destroy(); } catch (e) { } panoInstance = null; }
   }
@@ -42,33 +49,45 @@
     heroImg.src = src;
   }
 
+  // replace your current showPano with this:
   function showPano(src) {
-    if (typeof pannellum === 'undefined') { console.warn('Pannellum not loaded—showing still image instead.'); return showImage(src); }
+    if (typeof pannellum === 'undefined') {
+      console.warn('Pannellum not loaded—showing still image instead.');
+      return showImage(src);
+    }
+    const url = absUrl(src);
     heroImg.style.display = 'none';
     panoBox.classList.add('is-on');
     panoBox.setAttribute('aria-hidden', 'false');
     destroyPano();
     panoInstance = pannellum.viewer('panoViewer', {
       type: 'equirectangular',
-      panorama: src,
+      panorama: url,
       autoLoad: true,
       showZoomCtrl: true,
       hfov: 100,
+      crossOrigin: 'anonymous'
     });
   }
 
+
+  // replace your current showTour with this:
   function showTour(config) {
     if (typeof pannellum === 'undefined') {
       console.warn('Pannellum not loaded—cannot show tour; showing poster if available.');
       const poster = getTourPosterFromConfig(config);
       return poster ? showImage(poster) : showImage('pngs/cazzaResidence.png');
     }
+    // make a shallow copy and set a basePath so scene panoramas resolve correctly
+    const cfg = { ...config, basePath: new URL('.', document.baseURI).href, crossOrigin: 'anonymous' };
+
     heroImg.style.display = 'none';
     panoBox.classList.add('is-on');
     panoBox.setAttribute('aria-hidden', 'false');
     destroyPano();
-    panoInstance = pannellum.viewer('panoViewer', config);
+    panoInstance = pannellum.viewer('panoViewer', cfg);
   }
+
 
   function getTourPosterFromConfig(cfg) {
     // Try to find first scene’s panorama as a poster fallback
@@ -151,7 +170,7 @@
       capacity: 4,
       description: "Male Unit",
       advance: "No animal allowed",
-      images: [{ src: "pngs/SamplePano.jpg", kind: "pano" },"pngs/roomSample.png", "pngs/roomSample.png", "pngs/cazzaResidence.png"]
+      images: [{ src: "pngs/SamplePano1.jpg", kind: "pano" }, "pngs/roomSample.png", "pngs/roomSample.png", "pngs/cazzaResidence.png"]
     },
     {
       id: "S101",
