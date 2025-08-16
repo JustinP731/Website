@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cazza Zamora Residences</title>
+  <link rel="stylesheet" href="https://unpkg.com/pannellum/build/pannellum.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body id="top">
+  <header id="topNav" class="top-nav">
+    <div class="branding">
+      <a href="#" id="logoBtn"><img src="pngs/Logo1.png" alt="Cazza Logo" class="logo"></a>
+    </div>
+    <div class="nav-icons">
+      <button class="menu-btn">☰</button>
+      <div id="userStatus" class="profile-circle" title="Guest">G</div>
+    </div>
+  </header>
+
+  <div id="searchBar" class="search-bar">
+    <button id="homeBtn" class="active">Home</button>
+    <button id="roomBtn">Room Available</button>
+    <button id="faqsBtn">FAQs</button>
+  </div>
+
+  <section class="hero-image" id="hero">
+    <img src="pngs/cazzaResidence.png" alt="Cazza Zamora Residences">
+  </section>
+
+  <section id="home" class="content-section">
+    <h2>Welcome to Cazza Zamora Residences</h2>
+    <p>Discover peaceful and affordable living at the heart of the city. Explore available rooms and unit types easily.
+    </p>
+  </section>
+
+  <section id="rooms" class="content-section">
+    <div class="container">
+    <h2>Rooms Available</h2>
+    <div class="filters-and-rooms">
+
+      <!-- Filters section -->
+      <div class="room-filters">
+        <div class="filter-group">
+          <label for="unitType">Unit Type:</label>
+          <select id="unitType">
+            <option value="all">All</option>
+            <option value="studio">Studio</option>
+            <option value="dorm">Dorm</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="switch-container">
+            <input type="checkbox" id="availabilityToggle">
+            <span class="slider"></span>
+            <span class="label-text" id="availabilityLabel">Show All</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Listings Container -->
+      <div class="room-list" id="roomList"></div>
+    </div>
+
+    <!-- DETAILS PANEL (slides up; behaves like a section, not a dialog) -->
+<section id="roomPanel" class="room-panel" aria-hidden="true">
+  <div class="room-panel__bar">
+    <h2 class="room-title">Room</h2>
+    <button class="room-close" type="button" aria-label="Close">×</button>
+  </div>
+
+  <div class="room-panel__content">
+    <!-- left: details -->
+    <aside class="room-info">
+      <h3>Unit Details</h3>
+      <dl class="kv"></dl>
+
+      <h4>Description</h4>
+      <p class="desc"></p>
+
+      <h4>Advance Details</h4>
+      <p class="adv"></p>
+
+      <button class="btn-inquire" type="button">Inquire</button>
+    </aside>
+
+    <!-- center: hero -->
+    <figure class="room-hero">
+      <img class="hero-img" src="" alt="">
+      <div id="panoViewer" class="pano-viewer" aria-hidden="true"></div>
+      <figcaption class="muted">Tap a thumbnail →</figcaption>
+    </figure>
+
+    <!-- right: thumbnails -->
+    <nav class="thumbs" aria-label="Gallery"></nav>
+  </div>
+</section>
+
+    </div>
+  </section>
+
+  <section id="faqs" class="content-section" style="display: none;">
+    <h2>FAQs</h2>
+    <p>Explore the various unit types offered in our residence.</p>
+  </section>
+
+  <footer class="footer">
+    <div class="contact-info">
+      <span>
+        <img src="pngs/iconCall.png" class="icon" alt="Phone"> (02) 7117 8436
+      </span>
+      <span>
+        <img src="pngs/iconMobile.png" class="icon" alt="Mobile"> 0998 545 3352
+      </span>
+    </div>
+    <div class="social-link">
+      <a href="https://www.facebook.com/cazzazamoraresidences" target="_blank">
+        facebook.com/cazzazamoraresidences
+      </a>
+    </div>
+  </footer>
+  <script src="https://unpkg.com/pannellum/build/pannellum.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
