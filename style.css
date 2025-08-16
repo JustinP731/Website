@@ -1,266 +1,490 @@
-/* ======================
-   TOKENS / RESET / BASE
-   ====================== */
-:root{
-  --green: #2f4b2f;
-  --cream: #FBF6F6;
-  --ink: #1b1f23;
-  --gold: #f1c40f;
-  --radius: 14px;
-  --shadow-1: 0 2px 6px rgba(0,0,0,0.10);
-  --shadow-2: 0 8px 28px rgba(0,0,0,0.12);
-  --container: 1180px;
-  --sticky-offset: 90px; /* keeps aside below sticky search bar */
-  --hero-h: 520px;
-  --hero-h-max: 52vh;
-}
+/* script.js — cleaned & organized */
+(() => {
+  // ===== DOM: core nav/sections =====
+  const homeBtn = document.getElementById("homeBtn");
+  const logoBtn = document.getElementById("logoBtn");
+  const roomBtn = document.getElementById("roomBtn");
+  const faqsBtn = document.getElementById("faqsBtn");
 
-*{ box-sizing:border-box; margin:0; padding:0; font-family: Arial, sans-serif; }
+  const hero = document.getElementById("hero");
+  const home = document.getElementById("home");
+  const rooms = document.getElementById("rooms");
+  const faqs = document.getElementById("faqs");
+  const searchBar = document.getElementById("searchBar");
 
-html, body{ height:100% }
+  // ===== DOM: rooms / filters / panel =====
+  const roomListEl = document.getElementById("roomList");
+  const unitTypeSelect = document.getElementById("unitType");
+  const availabilityToggle = document.getElementById("availabilityToggle");
+  const availabilityLabel = document.getElementById("availabilityLabel");
 
-body{
-  display:flex; flex-direction:column;
-  min-height:100vh; max-width:100%;
-  overflow-x:hidden;
-  color:#111;
-}
+  const panel = document.getElementById("roomPanel");
+  const panelTitle = panel.querySelector(".room-title");
+  const heroImg = panel.querySelector(".hero-img");
+  const kv = panel.querySelector(".kv");
+  const descEl = panel.querySelector(".desc");
+  const advEl = panel.querySelector(".adv");
+  const thumbsNav = panel.querySelector(".thumbs");
+  const closeBtn = panel.querySelector(".room-close");
 
-img{ display:block; max-width:100% }
+  // 360° / TOUR viewer bits
+  const panoBox = document.getElementById('panoViewer');
+  let panoInstance = null;
 
-/* =========
-   LAYOUT UI
-   ========= */
-.top-nav{
-  position:fixed; top:0; left:0; right:0; z-index:1000;
-  background:var(--green); color:var(--cream);
-  display:flex; justify-content:space-between; align-items:center;
-  padding:1rem; box-shadow:0 2px 8px rgba(0,0,0,0.2);
-}
-.branding{ display:flex; align-items:center; gap:10px }
-.branding .logo{ height:40px }
-.nav-icons{ display:flex; align-items:center; gap:1rem }
-.menu-btn{ font-size:24px; background:none; color:#fff; border:0; cursor:pointer }
-.profile-circle{
-  background:var(--gold); color:#000; font-weight:700;
-  width:32px; height:32px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  user-select:none;
-}
+  // add near the top, under your other helpers
+  function absUrl(src) {
+    // robustly resolve "pngs/..." to "http://127.0.0.1:5500/public/pngs/..."
+    return new URL(src, document.baseURI).href;
+  }
 
-.hero-image{ height:300px; overflow:hidden }
-.hero-image img{
-  width:100%; height:100%;
-  object-fit:cover; object-position:50% 85%;
-}
 
-.search-bar{
-  position:sticky; top:55px; z-index:999;
-  background:var(--cream);
-  padding:30px 1rem 0.75rem;
-  display:flex; gap:1rem;
-  box-shadow:0 2px 4px rgba(0,0,0,0.1);
-  margin-bottom:1rem;
-  transition:transform .3s ease;
-}
-.search-bar button{
-  padding:.5rem 1rem; background:var(--cream); border:0; cursor:pointer;
-}
-.search-bar button.active{
-  background:transparent; border-bottom:3px solid #204020; font-weight:700;
-}
+  function destroyPano() {
+    if (panoInstance) { try { panoInstance.destroy(); } catch (e) { } panoInstance = null; }
+  }
 
-/* ========
-   FOOTER
-   ======== */
-.footer{
-  background:#204020; color:#FCE3B5;
-  display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; gap:.75rem 1rem;
-  padding:1rem; font-size:.9rem;
-}
-.footer .contact-info{
-  display:flex; align-items:center; gap:1rem;
-  flex-wrap:nowrap; white-space:nowrap;
-}
-.footer .contact-info span{
-  display:inline-flex; align-items:center; gap:.4rem;
-}
-.footer .social-link a{ color:#FCE3B5; text-decoration:none; white-space:nowrap }
-.icon{ display:inline-block; width:16px; height:16px; vertical-align:middle }
+  function showImage(src) {
+    destroyPano();
+    if (panoBox) { panoBox.classList.remove('is-on'); panoBox.setAttribute('aria-hidden', 'true'); }
+    heroImg.style.display = 'block';
+    heroImg.src = src;
+  }
 
-/* =============
-   PAGE SECTIONS
-   ============= */
-.content-section{ padding:3rem 1rem 2rem; background:#fff; flex:1 }
-.content-section h2{ margin-bottom:1rem; color:var(--green) }
-.content-section ul{ list-style:none; padding-left:0 }
-.content-section li{
-  background:#f4f4f4; margin-bottom:.75rem; padding:1rem;
-  border-left:6px solid var(--green);
-  box-shadow:0 1px 3px rgba(0,0,0,0.08);
-}
+  // replace your current showPano with this:
+  function showPano(src) {
+    if (typeof pannellum === 'undefined') {
+      console.warn('Pannellum not loaded—showing still image instead.');
+      return showImage(src);
+    }
+    const url = absUrl(src);
+    heroImg.style.display = 'none';
+    panoBox.classList.add('is-on');
+    panoBox.setAttribute('aria-hidden', 'false');
+    destroyPano();
+    panoInstance = pannellum.viewer('panoViewer', {
+      type: 'equirectangular',
+      panorama: url,
+      autoLoad: true,
+      showZoomCtrl: true,
+      hfov: 100,
+      crossOrigin: 'anonymous'
+    });
+  }
 
-/* container width like the mock */
-.container{ max-width:var(--container); margin:0 auto; padding:0 16px }
 
-/* =============
-   ROOMS GRID UI
-   ============= */
-.room-filters{
-  display:flex; flex-wrap:wrap; align-items:flex-start; gap:1rem;
-  margin:1rem 0; padding:0 .5rem;
-}
-.filter-group{ display:flex; align-items:center; gap:.75rem; flex-shrink:0 }
+  // replace your current showTour with this:
+  function showTour(config) {
+    if (typeof pannellum === 'undefined') {
+      console.warn('Pannellum not loaded—cannot show tour; showing poster if available.');
+      const poster = getTourPosterFromConfig(config);
+      return poster ? showImage(poster) : showImage('pngs/cazzaResidence.png');
+    }
+    // make a shallow copy and set a basePath so scene panoramas resolve correctly
+    const cfg = { ...config, basePath: new URL('.', document.baseURI).href, crossOrigin: 'anonymous' };
 
-.switch-container{ display:inline-flex; align-items:center; gap:.5rem; cursor:pointer; user-select:none }
-.switch-container input{ display:none }
-.slider{
-  width:40px; height:20px; background:#ccc; border-radius:20px; position:relative;
-  transition:background-color .3s ease;
-}
-.slider::before{
-  content:""; position:absolute; width:16px; height:16px; top:2px; left:2px;
-  background:#fff; border-radius:50%; transition: transform .3s ease;
-}
-.switch-container input:checked + .slider{ background:#4CAF50 }
-.switch-container input:checked + .slider::before{ transform:translateX(20px) }
-.label-text{ font-weight:700; color:#333; pointer-events:none }
+    heroImg.style.display = 'none';
+    panoBox.classList.add('is-on');
+    panoBox.setAttribute('aria-hidden', 'false');
+    destroyPano();
+    panoInstance = pannellum.viewer('panoViewer', cfg);
+  }
 
-.room-list{
-  display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap:1.5rem;
-}
 
-.room-card{
-  background:#fff; border-radius:8px; box-shadow:var(--shadow-1);
-  overflow:hidden; display:flex; flex-direction:column;
-  transition: transform .2s ease; cursor:pointer;
-}
-.room-card:hover{ transform: translateY(-4px) }
-.room-card img{ width:100%; height:160px; object-fit:cover }
-.room-card-content{ padding:1rem; display:flex; flex-direction:column; gap:.5rem }
-.room-card-content h4{ font-size:1rem; margin-bottom:.25rem; color:var(--green) }
-.room-card-content p{ margin:0; font-size:.9rem; color:#444 }
-.room-card-content .highlight{ font-weight:700 }
+  function getTourPosterFromConfig(cfg) {
+    // Try to find first scene’s panorama as a poster fallback
+    const first = cfg?.default?.firstScene;
+    if (first && cfg.scenes?.[first]?.panorama) return cfg.scenes[first].panorama;
+    // Otherwise try any scene
+    const ids = cfg?.scenes ? Object.keys(cfg.scenes) : [];
+    if (ids.length && cfg.scenes[ids[0]]?.panorama) return cfg.scenes[ids[0]].panorama;
+    return null;
+  }
 
-.status{
-  display:inline-block; padding:.25rem .5rem; border-radius:4px; font-weight:700; font-size:.85rem;
-}
-.status.available{ background:#c8e6c9; color:#256029 }
-.status.occupied{ background:#ffcdd2; color:#b71c1c }
+  // Normalizer so thumbnails & display logic are simple
+  function normalizeMedia(m) {
+    if (typeof m === 'string') return { kind: 'image', src: m };
+    if (m?.kind === 'pano') return { kind: 'pano', src: m.src };
+    if (m?.kind === 'tour') return { kind: 'tour', poster: m.poster || getTourPosterFromConfig(m.tour), tour: m.tour };
+    return { kind: 'image', src: m?.src || 'pngs/cazzaResidence.png' };
+  }
 
-/* selected-card hint */
-.room-card.is-active{ outline:3px solid #cfe8d0; outline-offset:2px; border-radius:8px }
+  function getCoverFromFirstMedia(first) {
+    const fm = normalizeMedia(first);
+    if (fm.kind === 'image') return fm.src;
+    if (fm.kind === 'pano') return fm.src;
+    if (fm.kind === 'tour') return fm.poster || 'pngs/cazzaResidence.png';
+    return 'pngs/cazzaResidence.png';
+  }
 
-/* =========================
-   DETAILS PANEL (inline grow)
-   ========================= */
-.room-panel{ /* hidden by default; JS toggles .is-open */
-  display:none;
-  margin-top:16px;
-  background:#fff; border-radius:var(--radius); box-shadow:var(--shadow-2);
-  overflow:hidden;
-  transform-origin: var(--grow-x,50%) var(--grow-y,0%);
-}
-.room-panel.is-open{
-  display:block;
-  animation: growIn .28s ease;
-}
-@keyframes growIn{
-  from{ transform:scale(.98); opacity:0 }
-  to{   transform:scale(1);   opacity:1 }
-}
 
-.room-panel__bar{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 16px; background:var(--green); color:#fff;
-}
-.room-title{ font-size:1.1rem; font-weight:700 }
-.room-close{ font-size:28px; border:0; background:transparent; color:#fff; cursor:pointer }
-.room-close:focus-visible{ outline:2px solid var(--green); outline-offset:2px }
+  // ===== Data =====
+  const roomsData = [
+    {
+      id: "R001",
+      type: "dorm",
+      name: "Room 001",
+      price: 4000,
+      occupancy: 2,
+      capacity: 4,
+      description: "Male Unit",
+      advance: "No animal allowed",
+      images: [
+        {
+          kind: "tour", poster: "pngs/TourA.png",
+          tour: {
+            default: { firstScene: "hall", autoLoad: true, showZoomCtrl: true, hfov: 100 },
+            scenes: {
+              hall: {
+                title: "Hall",
+                panorama: "pngs/TourA.png",
+                hotSpots: [
+                  { pitch: 0, yaw: 290, type: "scene", text: "Go to Sala", sceneId: "sala" },
+                  { pitch: 0, yaw: 95, type: "scene", text: "Go to Kitchen", sceneId: "kitchen" }
+                ]
+              },
+              sala: {
+                title: "Sala",
+                panorama: "pngs/TourAC.png",
+                hotSpots: [
+                  { pitch: 2, yaw: 85, type: "scene", text: "Back to Hall", sceneId: "hall" }
+                ]
+              },
+              kitchen: {
+                title: "Kitchen",
+                panorama: "pngs/TourAB.png",
+                hotSpots: [
+                  { pitch: 2, yaw: 120, type: "scene", text: "Back to Hall", sceneId: "hall" }
+                ]
+              }
+            }
+          }
+        },
+        "pngs/roomSample.png", "pngs/roomSample.png", "pngs/cazzaResidence.png", "pngs/roomSample.png"
+      ]
+    },
+    {
+      id: "R002",
+      type: "dorm",
+      name: "Room 002",
+      price: 4000,
+      occupancy: 4,
+      capacity: 4,
+      description: "Male Unit",
+      advance: "No animal allowed",
+      images: [{ src: "pngs/SamplePano1.jpg", kind: "pano" }, "pngs/roomSample.png", "pngs/roomSample.png", "pngs/cazzaResidence.png"]
+    },
+    {
+      id: "S101",
+      type: "studio",
+      name: "Room 101",
+      price: 5000,
+      occupancy: 0,
+      capacity: 1,
+      description: "Male Unit",
+      advance: "No animal allowed",
+      images: ["pngs/roomSample.png", "pngs/roomSample.png", "pngs/cazzaResidence.png"]
+    },
+    {
+      id: "S102",
+      type: "studio",
+      name: "Room 102",
+      price: 5000,
+      occupancy: 1,
+      capacity: 1,
+      description: "Male Unit",
+      advance: "No animal allowed",
+      images: ["pngs/roomSample.png", "pngs/roomSample.png", "pngs/cazzaResidence.png"]
+    }
+  ];
 
-.room-panel__content{
-  display:grid; gap:20px; padding:18px;
-  grid-template-columns:300px 1fr 140px; align-items:start;
-}
+  // ===== Utils =====
+  const SUPPORTS_VIEW_TRANSITIONS = typeof document.startViewTransition === "function";
 
-.room-info{
-  border:1px solid #e5e7eb; border-radius:12px; padding:14px; background:#fff;
-  align-self:start; position:sticky; top:var(--sticky-offset);
-}
-.kv{ display:grid; gap:8px; margin:10px 0 14px }
-.kv div{ display:flex; gap:8px; justify-content:space-between }
-.kv dt{ font-weight:600; color:#374151 }
-.kv dd{ margin:0; color:#111 }
+  const isAvailable = (room) => room.occupancy < room.capacity;
 
-.desc,.adv{ color:#333 }
-.muted{ color:#6b7280; font-size:.9rem }
-.btn-inquire{
-  margin-top:12px; background:var(--green); color:#fff; border:0;
-  border-radius:10px; padding:10px 14px; cursor:pointer;
-}
+  const roomCardHTML = (room) => {
+    const statusClass = isAvailable(room) ? "available" : "occupied";
+    const statusLabel = isAvailable(room) ? "Available" : "Occupied";
+    const cover = (room.images && room.images[0]) ? getCoverFromFirstMedia(room.images[0]) : "placeholder.jpg";
 
-.room-hero{ margin:0; display:grid; gap:8px; align-content:start }
-.hero-img{
-  width:100%;
-  height:var(--hero-h);
-  max-height:var(--hero-h-max);
-  object-fit:cover; border-radius:14px; background:#ddd;
-}
 
-/* Right-side thumbs: scroll when there are many */
-.thumbs{
-  display:grid;
-  gap:10px;
-  align-content:start;
-  align-self:start;               /* align with top of hero */
-  max-height:var(--hero-h-max);   /* match hero clamp */
-  overflow:auto;                  /* <— scrolls vertically */
-  padding-right:6px;              /* room for scrollbar */
-  scrollbar-gutter: stable;       /* avoid layout shift */
-  overscroll-behavior: contain;   /* tame scroll chaining */
-}
+    const occText = `${room.occupancy} / ${room.capacity} 👥`;
+    const typeLabel = room.type === "dorm" ? "Dorm Type" : "Studio Type";
 
-/* (nice-to-have) thinner scrollbar on WebKit browsers */
-.thumbs::-webkit-scrollbar{ width:8px }
-.thumbs::-webkit-scrollbar-thumb{
-  background:rgba(0,0,0,.2); border-radius:8px;
-}
+    return `
+      <div 
+        class="room-card"
+        role="button"
+        tabindex="0"
+        aria-label="${room.name} details"
+        data-id="${room.id}"
+        data-type="${room.type}"
+        data-name="${room.name}"
+        data-price="${room.price}"
+        data-occupancy="${room.occupancy}"
+        data-capacity="${room.capacity}"
+        data-description="${room.description || ""}"
+        data-advance="${room.advance || ""}"
+      >
+        <img src="${cover}" alt="${room.type} image" loading="lazy" decoding="async">
+        <div class="room-card-content">
+          <p><span class="highlight">${typeLabel}</span> &nbsp;&nbsp; ${room.name}</p>
+          <p><span class="highlight">Monthly</span> &nbsp;&nbsp; ₱${room.price.toLocaleString()}</p>
+          <p><span class="highlight">Occupancy</span> &nbsp;&nbsp; ${occText}</p>
+          <p class="status ${statusClass}">${statusLabel}</p>
+        </div>
+      </div>
+    `;
+  };
 
-.thumbs .thumb{
-  position:relative; padding:0; border:2px solid transparent; background:#fff; border-radius:10px; cursor:pointer;
-}
-.thumbs .thumb.is-active{ border-color:var(--green) }
-.thumbs .thumb:focus-visible{ outline:2px solid var(--green); outline-offset:2px }
-.thumbs img{ width:100%; height:110px; object-fit:cover; border-radius:8px }
+  function showSection(section) {
+    if (!["home", "rooms", "faqs"].includes(section)) return;
 
-/* 360 viewer box, same size as your hero image */
-.pano-viewer{
-  width:100%;
-  height:var(--hero-h);
-  max-height:var(--hero-h-max);
-  border-radius:14px;
-  display:none;
-  background:#ddd; 
-  overflow:hidden;
-}
-.pano-viewer.is-on{ display:block }
+    hero.style.display = section === "home" ? "block" : "none";
+    home.style.display = section === "home" ? "block" : "none";
+    rooms.style.display = section === "rooms" ? "block" : "none";
+    faqs.style.display = section === "faqs" ? "block" : "none";
 
-/* little "360°" badge on thumbnails */
-.tag-360{
-  position:absolute; top:6px; right:6px;
-  font-size:12px; line-height:1;
-  padding:2px 6px; border-radius:999px;
-  background:var(--green); color:#fff;
-  pointer-events:none;
-}
+    // close details panel if leaving Rooms
+    if (section !== "rooms") closePanel();
+  }
 
-/* =========================
-   ACCESSIBILITY / MOTION
-   ========================= */
-@media (prefers-reduced-motion: reduce){
-  .search-bar{ transition:none }
-  .room-panel.is-open{ animation:none }
-}
+  // ===== Navigation (top buttons) =====
+  const navButtons = document.querySelectorAll(".search-bar button");
+  function setActiveButton(clickedBtn) {
+    navButtons.forEach((btn) => btn.classList.remove("active"));
+    clickedBtn.classList.add("active");
+  }
 
+  homeBtn.addEventListener("click", () => {
+    showSection("home");
+    setActiveButton(homeBtn);
+  });
+  logoBtn.addEventListener("click", () => {
+    showSection("home");
+    setActiveButton(homeBtn);
+  });
+  roomBtn.addEventListener("click", () => {
+    showSection("rooms");
+    setActiveButton(roomBtn);
+  });
+  faqsBtn.addEventListener("click", () => {
+    showSection("faqs");
+    setActiveButton(faqsBtn);
+  });
+
+  // ===== Search bar hide-on-scroll =====
+  let lastScrollTop = 0;
+  window.addEventListener("scroll", () => {
+    const current = window.pageYOffset || document.documentElement.scrollTop;
+    searchBar.style.transform = current > lastScrollTop ? "translateY(-100%)" : "translateY(0)";
+    lastScrollTop = current <= 0 ? 0 : current;
+  });
+
+  // ===== Filtering + render =====
+  function renderRooms(list) {
+    roomListEl.innerHTML = list.map(roomCardHTML).join("");
+    attachRoomCardClicks(); // delegate (binds once)
+  }
+
+  function filterRooms() {
+    const selectedType = unitTypeSelect.value;        // "all" | "studio" | "dorm"
+    const onlyAvailable = availabilityToggle.checked; // true | false
+
+    const filtered = roomsData.filter((room) => {
+      const matchesType = selectedType === "all" || room.type === selectedType;
+      const matchesAvailability = !onlyAvailable || isAvailable(room);
+      return matchesType && matchesAvailability;
+    });
+
+    renderRooms(filtered);
+  }
+
+  // ===== Details panel (inline section) =====
+  let activeCard = null;
+  let clicksBound = false;
+
+  function openPanel(room, clickSourceEl) {
+    // content
+    panelTitle.textContent = room.name;
+    kv.innerHTML = `
+      <div><dt>Unit Type</dt><dd>${room.type === "dorm" ? "Dorm" : "Studio"}</dd></div>
+      <div><dt>Price</dt><dd><span style="color:#6b7280">Monthly</span> ₱${room.price.toLocaleString()}</dd></div>
+      <div><dt>Number of Roommate</dt><dd>${room.occupancy}</dd></div>
+      <div><dt>Capacity</dt><dd>${room.capacity}</dd></div>
+    `;
+    descEl.textContent = room.description || "—";
+    advEl.textContent = room.advance || "—";
+
+    // media list (now supports 'image' | 'pano' | 'tour')
+    const mediaListRaw = (room.images && room.images.length ? room.images : ['pngs/cazzaResidence.png']);
+    const mediaList = mediaListRaw.map(normalizeMedia);
+
+    // show first media
+    const first = mediaList[0] || { kind: 'image', src: 'pngs/cazzaResidence.png' };
+    if (first.kind === 'tour') showTour(first.tour);
+    else if (first.kind === 'pano') showPano(first.src);
+    else showImage(first.src);
+
+    // thumbnails (one per media item)
+    // For 'tour' we render a single thumb with a "Tour" badge
+    thumbsNav.innerHTML = mediaList.map((m, i) => {
+      const thumbSrc = (m.kind === 'tour') ? (m.poster || 'pngs/cazzaResidence.png') : m.src;
+      const label = (m.kind === 'tour') ? 'Tour' : (m.kind === 'pano') ? '360°' : '';
+      return `
+    <button class="thumb ${i === 0 ? 'is-active' : ''}" 
+            data-kind="${m.kind}" 
+            data-src="${m.src || ''}"
+            data-idx="${i}" 
+            aria-label="Media ${i + 1}${label ? ' - ' + label : ''}">
+      <img src="${thumbSrc}" alt="">
+      ${label ? `<span class="tag-360">${label}</span>` : ''}
+    </button>
+  `;
+    }).join('');
+
+    thumbsNav.querySelectorAll('.thumb').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = +btn.dataset.idx;
+        const item = mediaList[idx];
+        // switch media
+        if (item.kind === 'tour') showTour(item.tour);
+        else if (item.kind === 'pano') showPano(item.src);
+        else showImage(item.src);
+
+        // update selected
+        thumbsNav.querySelectorAll('.thumb').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+      });
+    });
+
+    // grow animation origin from clicked card
+    if (clickSourceEl) {
+      const r = clickSourceEl.getBoundingClientRect();
+      const root = document.documentElement.getBoundingClientRect();
+      const x = ((r.left + r.width / 2) - root.left) / root.width * 100;
+      const y = ((r.top + r.height / 2) - root.top) / root.height * 100;
+      panel.style.setProperty("--grow-x", x + "%");
+      panel.style.setProperty("--grow-y", y + "%");
+    }
+
+    // show
+    panel.classList.add("is-open");
+    panel.setAttribute("aria-hidden", "false");
+    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function closePanel() {
+    panel.classList.remove("is-open");
+    panel.setAttribute("aria-hidden", "true");
+    panel.style.removeProperty("--grow-x");
+    panel.style.removeProperty("--grow-y");
+
+    // NEW: destroy pano and restore hero image
+    destroyPano();
+    if (panoBox) {
+      panoBox.classList.remove('is-on');
+      panoBox.setAttribute('aria-hidden', 'true');
+    }
+    heroImg.style.display = 'block';
+
+    if (activeCard) {
+      activeCard.classList.remove("is-active");
+      activeCard = null;
+    }
+  }
+
+  closeBtn.addEventListener("click", closePanel);
+  window.addEventListener("keydown", (e) => { if (e.key === "Escape") closePanel(); });
+
+  // Delegate clicks from the list (bind once)
+  function attachRoomCardClicks() {
+    if (clicksBound) return;
+    clicksBound = true;
+
+    // mouse/touch
+    roomListEl.addEventListener("click", (ev) => {
+      const card = ev.target.closest(".room-card");
+      if (!card) return;
+
+      // active hint
+      document
+        .querySelectorAll(".room-card.is-active")
+        .forEach((c) => c.classList.remove("is-active"));
+      activeCard = card;
+      activeCard.classList.add("is-active");
+
+      // get room data (from source data if possible)
+      const id = card.dataset.id;
+      const room =
+        roomsData.find((r) => r.id === id) || {
+          id,
+          type: card.dataset.type,
+          name: card.dataset.name,
+          price: Number(card.dataset.price),
+          occupancy: Number(card.dataset.occupancy),
+          capacity: Number(card.dataset.capacity),
+          description: card.dataset.description,
+          advance: card.dataset.advance,
+          images: (card.dataset.images || "").split(",").filter(Boolean)
+        };
+
+      if (SUPPORTS_VIEW_TRANSITIONS) {
+        document.startViewTransition(() => openPanel(room, card));
+      } else {
+        openPanel(room, card);
+      }
+    });
+
+    // keyboard (Enter / Space)
+    roomListEl.addEventListener("keydown", (e) => {
+      const card = e.target.closest(".room-card");
+      if (!card) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  }
+
+
+  // ===== Boot sequence =====
+  function boot() {
+    // label text
+    if (availabilityLabel) {
+      availabilityLabel.textContent = availabilityToggle.checked ? "Available Only" : "Show All";
+    }
+
+    // initial render (all rooms)
+    renderRooms(roomsData);
+
+    // filter events
+    unitTypeSelect.addEventListener("change", filterRooms);
+    availabilityToggle.addEventListener("change", () => {
+      availabilityLabel.textContent = availabilityToggle.checked ? "Available Only" : "Show All";
+      filterRooms();
+    });
+    availabilityLabel.addEventListener("click", () => {
+      availabilityToggle.checked = !availabilityToggle.checked;
+      availabilityToggle.dispatchEvent(new Event("change"));
+    });
+
+    // default section
+    showSection("home");
+  }
+
+  // ===== Simulate login badge (kept from your code) =====
+  (function updateUserBadge() {
+    const userStatus = document.getElementById("userStatus");
+    const isLoggedIn = false; // flip to true for tenant
+    if (isLoggedIn) {
+      userStatus.textContent = "T";
+      userStatus.title = "Tenant";
+    } else {
+      userStatus.textContent = "G";
+      userStatus.title = "Guest";
+    }
+  })();
+
+  // go!
+  boot();
+})();
