@@ -13,6 +13,9 @@
   const searchBar = document.getElementById("searchBar");
 
   // ===== DOM: rooms / filters / panel =====
+  const body = document.body;
+  const splitWrap = document.querySelector('.filters-and-rooms');
+  const topNav = document.getElementById('topNav');               // fixed green header
   const roomListEl = document.getElementById("roomList");
   const unitTypeSelect = document.getElementById("unitType");
   const availabilityToggle = document.getElementById("availabilityToggle");
@@ -35,6 +38,34 @@
   function absUrl(src) {
     // robustly resolve "pngs/..." to "http://127.0.0.1:5500/public/pngs/..."
     return new URL(src, document.baseURI).href;
+  }
+
+  // HEIGHT SYNC — make .room-list match the panel's actual rendered height
+  let panelResizeObs = null;
+
+  function getStickyOffsetPx() {
+    // We already set --sticky-offset on splitWrap in openPanel(); fallback to topNav if missing
+    const v = splitWrap && getComputedStyle(splitWrap).getPropertyValue('--sticky-offset');
+    const n = v ? parseInt(v, 10) : (topNav ? topNav.offsetHeight : 0);
+    return isNaN(n) ? 0 : n;
+  }
+
+  function syncSplitHeights() {
+    if (!splitWrap || !panel) return;
+    const stickyOffset = getStickyOffsetPx();
+    const viewportAvail = window.innerHeight - stickyOffset;
+
+    // The panel can be shorter than the available viewport.
+    // We want the list to match the panel's *visible* height, not vice versa.
+    const panelRect = panel.getBoundingClientRect();
+    const panelVisible = Math.min(viewportAvail, Math.round(panelRect.height));
+
+    // Apply to the left list only; panel remains natural/sticky.
+    const listEl = document.querySelector('.filters-and-rooms .room-list');
+    if (listEl) {
+      listEl.style.height = panelVisible + 'px';
+      listEl.style.overflowY = 'auto';
+    }
   }
 
 
@@ -275,6 +306,8 @@
   // ===== Search bar hide-on-scroll =====
   let lastScrollTop = 0;
   window.addEventListener("scroll", () => {
+    if (body.classList.contains("details-open")) return;
+
     const current = window.pageYOffset || document.documentElement.scrollTop;
     searchBar.style.transform = current > lastScrollTop ? "translateY(-100%)" : "translateY(0)";
     lastScrollTop = current <= 0 ? 0 : current;
@@ -370,7 +403,22 @@
     // show
     panel.classList.add("is-open");
     panel.setAttribute("aria-hidden", "false");
-    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    // INSERT B — enter split layout; equal heights; hide tabs row
+    body.classList.add("details-open");            // state flag for CSS
+    if (splitWrap) {
+      splitWrap.classList.add("is-split");
+      // use real header height so left/right bottoms line up
+      const headerH = topNav ? topNav.offsetHeight : 0;
+      splitWrap.style.setProperty("--sticky-offset", `${headerH}px`);
+    }
+    if (searchBar) searchBar.style.display = "none"; // hide "Home / Room Available / FAQs"
+    // Start syncing heights to the panel
+    syncSplitHeights();
+    panelResizeObs = new ResizeObserver(syncSplitHeights);
+    panelResizeObs.observe(panel);
+    window.addEventListener('resize', syncSplitHeights);
+
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest"});
   }
 
   function closePanel() {
@@ -391,6 +439,24 @@
       activeCard.classList.remove("is-active");
       activeCard = null;
     }
+
+    // INSERT C — leave split layout; restore UI
+    body.classList.remove("details-open");
+    if (splitWrap) {
+      splitWrap.classList.remove("is-split");
+      splitWrap.style.removeProperty("--sticky-offset");
+    }
+    if (searchBar) searchBar.style.display = "";   // back to CSS default
+    // Stop syncing and clear inline height
+    if (panelResizeObs) {
+      panelResizeObs.disconnect();
+      panelResizeObs = null;
+    }
+    const listEl = document.querySelector('.filters-and-rooms .room-list');
+    if (listEl) listEl.style.removeProperty('height');
+
+    window.removeEventListener('resize', syncSplitHeights);
+
   }
 
   closeBtn.addEventListener("click", closePanel);
@@ -461,6 +527,7 @@
     unitTypeSelect.addEventListener("change", filterRooms);
     availabilityToggle.addEventListener("change", () => {
       availabilityLabel.textContent = availabilityToggle.checked ? "Available Only" : "Show All";
+      availabilityLabel.title = availabilityLabel.textContent;
       filterRooms();
     });
     availabilityLabel.addEventListener("click", () => {
