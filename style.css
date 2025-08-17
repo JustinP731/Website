@@ -9,7 +9,7 @@
   --radius: 14px;
   --shadow-1: 0 2px 6px rgba(0, 0, 0, 0.10);
   --shadow-2: 0 8px 28px rgba(0, 0, 0, 0.12);
-  --container: 1180px;
+  --container: 1320px;
   --sticky-offset: 90px;
   /* keeps aside below sticky search bar */
   --hero-h: 520px;
@@ -271,6 +271,35 @@ img {
   transform: translateX(20px)
 }
 
+/* Prevent layout shift when the toggle label text changes */
+.filters-and-rooms {
+  --switch-label-w: 16ch;
+}
+
+/* fits "Available Only" comfortably */
+
+.switch-container .label-text {
+  display: inline-block;
+  width: var(--switch-label-w);
+  /* reserve space so the list/cards don't jump */
+  white-space: nowrap;
+  /* keep it on one line */
+  overflow: hidden;
+  /* if it ever gets longer, trim */
+  text-overflow: ellipsis;
+  /* … instead of wrapping/pushing */
+}
+
+/* (Optional) also reserve the container width so the switch + label is stable */
+.switch-container {
+  min-width: calc(40px
+      /*slider*/
+      + 8px
+      /*gap*/
+      + var(--switch-label-w));
+}
+
+
 .label-text {
   font-weight: 700;
   color: #333;
@@ -414,7 +443,7 @@ img {
   display: grid;
   gap: 20px;
   padding: 18px;
-  grid-template-columns: 300px 1fr 140px;
+  grid-template-columns: 260px 1fr 120px;
   align-items: start;
 }
 
@@ -580,4 +609,79 @@ img {
   .room-panel.is-open {
     animation: none
   }
+}
+
+/* ===== DESKTOP SPLIT VIEW (cards left, panel right) — FINAL ===== */
+
+/* we'll set --sticky-offset from JS so heights are exact under the fixed header */
+.filters-and-rooms {
+  --panel-bottom-gap: 0px;
+  /* keep 0 so no extra bottom space */
+}
+
+/* 2-column split */
+.filters-and-rooms.is-split {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  /* left width — tweak if needed */
+  grid-template-areas:
+    "filters panel"
+    "list    panel";
+  gap: 12px 16px;
+  align-items: start;
+  align-content: start;
+  /* avoid vertical stretching */
+}
+
+/* Place elements */
+.filters-and-rooms.is-split .room-filters {
+  grid-area: filters;
+  position: sticky;
+  top: var(--sticky-offset);
+  z-index: 1;
+}
+
+.filters-and-rooms.is-split .room-list {
+  grid-area: list;
+}
+
+.filters-and-rooms.is-split .room-panel {
+  grid-area: panel;
+  margin-top: 0;
+}
+
+/* Right column: pinned and scrolls inside if needed */
+.filters-and-rooms.is-split .room-panel {
+  position: sticky;
+  top: var(--sticky-offset);
+  overflow: auto;
+}
+
+/* Left column: its own scroller; stack cards vertically */
+.filters-and-rooms.is-split .room-list {
+  overflow-y: auto;
+  display: flex;
+  /* overrides your default grid layout */
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+  /* room for scrollbar */
+  scrollbar-gutter: stable;
+}
+
+.filters-and-rooms.is-split .room-list>.room-card {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* Hide the tabs row (Home / Room Available / FAQs) only while panel is open */
+body.details-open .search-bar {
+  display: none !important;
+}
+
+/* Tighter container just for the Rooms section */
+#rooms .container {
+  padding-left: 0px;
+  /* was 16px globally */
+  padding-right: 0px;
 }
