@@ -1037,3 +1037,84 @@ dialog.inquire-dialog::backdrop {
     animation: none;
   }
 }
+
+/* =========================================
+   12) FORM VALIDATION — clean, JS-driven
+   - Single source of truth = JS (.invalid + .field-error)
+   - No pseudo-elements, no duplicates
+   ========================================= */
+:root {
+  --danger: #dc2626; /* error red */
+}
+
+/* Error message block inserted by JS */
+.input-wrap .field-error {
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--danger);
+}
+
+/* Red outline when JS flags a field as invalid */
+.input-wrap.invalid input,
+.input-wrap.invalid select,
+input[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, .16);
+}
+
+/* Optional: subtle placeholder tint on invalid */
+input[aria-invalid="true"]::placeholder {
+  color: var(--danger);
+  opacity: .9;
+}
+
+/* =========================================
+   12b) LAYOUT & FOOTER PATCH (non-breaking overrides)
+   - Push footer to bottom on short pages
+   - Prevent footer overflow on small screens
+   ========================================= */
+
+/* Let <main> take the available height (so footer sits at the bottom) */
+#main {
+  flex: 1 0 auto;
+  display: block;
+}
+
+/* Footer: allow wrapping instead of forcing one line */
+.footer .contact-info {
+  flex-wrap: wrap;
+  white-space: normal;
+}
+
+.footer .social-link a {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Stack neatly on narrow screens */
+@media (max-width: 560px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+}
+
+.auth-form { --field-h: 44px; } /* matches .auth-form input height */
+
+.auth-form .input-with-action { position: relative; }
+
+/* Make room for the inline button inside the input */
+.auth-form .input-with-action input {
+  padding-right: 84px; /* space for "Send" / countdown */
+}
+
+/* Center the button relative to the input's height, unaffected by error text */
+.auth-form .input-with-action .inline-action {
+  top: calc(var(--field-h) / 2);
+  transform: translateY(-50%);
+  min-width: 56px;
+  text-align: right;
+}
