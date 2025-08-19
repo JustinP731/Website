@@ -14,10 +14,78 @@
     <div class="branding">
       <a href="#" id="logoBtn"><img src="pngs/Logo1.png" alt="Cazza Logo" class="logo"></a>
     </div>
+
     <div class="nav-icons">
-      <button class="menu-btn">☰</button>
+      <button id="menuBtn" class="menu-btn" type="button" aria-haspopup="menu" aria-expanded="false"
+        aria-controls="userMenu">☰</button>
+      <div id="userMenu" class="menu-popover" role="menu" aria-labelledby="menuBtn" hidden>
+        <button id="menuLogin" role="menuitem">Log in</button>
+        <button id="menuRegister" role="menuitem">Register</button>
+        <button id="menuLogout" role="menuitem">Log out</button>
+      </div>
       <div id="userStatus" class="profile-circle" title="Guest">G</div>
     </div>
+
+    <!-- just after the closing </div> of .nav-icons (still inside header) -->
+    <dialog id="authDialog" class="login-dialog" aria-labelledby="authTitle">
+      <button type="button" class="dialog-close" aria-label="Close">×</button>
+
+      <h3 id="authTitle">Account Log In</h3>
+
+      <form id="authForm" class="auth-form" method="dialog" novalidate>
+        <div class="input-wrap">
+          <input id="authEmail" type="email" placeholder="Email" autocomplete="email" required>
+        </div>
+
+        <div class="input-wrap">
+          <input id="authPass" type="password" placeholder="Password" autocomplete="current-password" required>
+        </div>
+
+        <button id="authSubmit" class="btn primary block" type="submit">
+          Log In
+        </button>
+
+        <div class="register-row">
+          <span class="line" aria-hidden="true"></span>
+          <button type="button" id="registerBtn" class="link">Register Now</button>
+          <span class="line" aria-hidden="true"></span>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Register dialog -->
+    <dialog id="registerDialog" class="register-dialog" aria-labelledby="regTitle">
+      <button type="button" class="dialog-close" aria-label="Close">×</button>
+
+      <h3 id="regTitle">Account Register</h3>
+
+      <form id="regForm" class="auth-form" method="dialog" novalidate>
+        <div class="input-wrap">
+          <input id="regEmail" type="email" placeholder="Email" autocomplete="email" required>
+        </div>
+
+        <div class="input-wrap input-with-action">
+          <input id="regCode" type="text" placeholder="Verification Code" required>
+          <button type="button" id="regSend" class="inline-action">Send</button>
+        </div>
+
+        <div class="input-wrap">
+          <input id="regPass" type="password" placeholder="Enter password" autocomplete="new-password" required>
+        </div>
+
+        <div class="input-wrap">
+          <input id="regPass2" type="password" placeholder="Re-Enter password" autocomplete="new-password" required>
+        </div>
+
+        <button id="regSubmit" class="btn primary block" type="submit">Register</button>
+
+        <p class="switch-auth">
+          Already have an account?
+          <button type="button" class="link" id="regToLogin">Log In</button>
+        </p>
+      </form>
+    </dialog>
+
   </header>
 
   <div id="searchBar" class="search-bar">
