@@ -1,17 +1,21 @@
-/* ======================
+/* =========================================
    TOKENS / RESET / BASE
-   ====================== */
+   ========================================= */
 :root {
   --green: #2f4b2f;
   --cream: #FBF6F6;
   --ink: #1b1f23;
   --gold: #f1c40f;
   --radius: 14px;
-  --shadow-1: 0 2px 6px rgba(0, 0, 0, 0.10);
-  --shadow-2: 0 8px 28px rgba(0, 0, 0, 0.12);
+  --shadow-1: 0 2px 6px rgba(0, 0, 0, .10);
+  --shadow-2: 0 8px 28px rgba(0, 0, 0, .12);
   --container: 1320px;
-  --sticky-offset: 90px;
-  /* keeps aside below sticky search bar */
+
+  /* JS updates these when the split panel opens */
+  --sticky-offset: 64px;
+  --filters-h: 0px;
+
+  /* media heights */
   --hero-h: 520px;
   --hero-h-max: 52vh;
 }
@@ -25,7 +29,7 @@
 
 html,
 body {
-  height: 100%
+  height: 100%;
 }
 
 body {
@@ -39,17 +43,21 @@ body {
 
 img {
   display: block;
-  max-width: 100%
+  max-width: 100%;
 }
 
-/* =========
-   LAYOUT UI
-   ========= */
+[hidden],
+.menu-popover[hidden] {
+  display: none !important;
+}
+
+/* =========================================
+   TOP NAV (support #topNav and .top-nav)
+   ========================================= */
+#topNav,
 .top-nav {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto 0;
   z-index: 1000;
   background: var(--green);
   color: var(--cream);
@@ -57,45 +65,41 @@ img {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
 }
 
 .branding {
   display: flex;
   align-items: center;
-  gap: 10px
+  gap: 10px;
 }
 
 .branding .logo {
-  height: 40px
+  height: 40px;
 }
 
-/* Top-right capsule container */
+/* Hamburger + avatar */
 .nav-icons {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 6px 10px;
   background: #fff;
   border-radius: 9999px;
-  /* pill */
   box-shadow: 0 4px 16px rgba(0, 0, 0, .15);
 }
 
-/* Hamburger inside the white capsule */
 .menu-btn {
   font-size: 18px;
-  /* smaller like the screenshot */
   background: transparent;
   color: #111;
-  /* dark icon on white pill */
   border: 0;
   width: 28px;
   height: 28px;
   display: inline-grid;
   place-items: center;
   border-radius: 8px;
-  /* subtle hover rounding */
   cursor: pointer;
 }
 
@@ -105,7 +109,6 @@ img {
 
 .menu-btn:focus-visible {
   outline: 2px solid #0b5;
-  /* accessible focus ring */
   outline-offset: 2px;
 }
 
@@ -121,13 +124,53 @@ img {
   justify-content: center;
   line-height: 1;
   user-select: none;
-  box-shadow: none;
-  /* keep it flat like the screenshot */
 }
 
+/* Popover menu */
+.menu-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1001;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+  padding: 8px;
+  min-width: 180px;
+}
+
+.menu-popover button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: #111;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.menu-popover button:hover,
+.menu-popover button:focus-visible {
+  background: rgba(0, 0, 0, .06);
+  outline: none;
+}
+
+.menu-popover .menu-sep {
+  border: 0;
+  height: 1px;
+  background: #e9ecef;
+  margin: 6px 0;
+}
+
+/* =========================================
+   HERO
+   ========================================= */
 .hero-image {
   height: 300px;
-  overflow: hidden
+  overflow: hidden;
 }
 
 .hero-image img {
@@ -137,15 +180,19 @@ img {
   object-position: 50% 85%;
 }
 
+/* =========================================
+   SECTION TAB BAR
+   ========================================= */
 .search-bar {
   position: sticky;
-  top: 55px;
+  top: var(--sticky-offset);
+  /* <— uses the same offset as split layout */
   z-index: 999;
   background: var(--cream);
-  padding: 30px 1rem 0.75rem;
+  padding: 30px 1rem .75rem;
   display: flex;
   gap: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
   margin-bottom: 1rem;
   transition: transform .3s ease;
 }
@@ -163,9 +210,9 @@ img {
   font-weight: 700;
 }
 
-/* ========
+/* =========================================
    FOOTER
-   ======== */
+   ========================================= */
 .footer {
   background: #204020;
   color: #FCE3B5;
@@ -182,7 +229,6 @@ img {
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-wrap: nowrap;
   white-space: nowrap;
 }
 
@@ -195,33 +241,33 @@ img {
 .footer .social-link a {
   color: #FCE3B5;
   text-decoration: none;
-  white-space: nowrap
+  white-space: nowrap;
 }
 
 .icon {
   display: inline-block;
   width: 16px;
   height: 16px;
-  vertical-align: middle
+  vertical-align: middle;
 }
 
-/* =============
-   PAGE SECTIONS
-   ============= */
+/* =========================================
+   GENERIC PAGE SECTIONS
+   ========================================= */
 .content-section {
   padding: 3rem 1rem 2rem;
   background: #fff;
-  flex: 1
+  flex: 1;
 }
 
 .content-section h2 {
   margin-bottom: 1rem;
-  color: var(--green)
+  color: var(--green);
 }
 
 .content-section ul {
   list-style: none;
-  padding-left: 0
+  padding-left: 0;
 }
 
 .content-section li {
@@ -229,19 +275,18 @@ img {
   margin-bottom: .75rem;
   padding: 1rem;
   border-left: 6px solid var(--green);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
 }
 
-/* container width like the mock */
 .container {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 0 16px
+  padding: 0 16px;
 }
 
-/* =============
-   ROOMS GRID UI
-   ============= */
+/* =========================================
+   ROOMS — FILTERS
+   ========================================= */
 .room-filters {
   display: flex;
   flex-wrap: wrap;
@@ -255,7 +300,12 @@ img {
   display: flex;
   align-items: center;
   gap: .75rem;
-  flex-shrink: 0
+  flex-shrink: 0;
+}
+
+/* Toggle */
+.filters-and-rooms {
+  --switch-label-w: 16ch;
 }
 
 .switch-container {
@@ -263,11 +313,12 @@ img {
   align-items: center;
   gap: .5rem;
   cursor: pointer;
-  user-select: none
+  user-select: none;
+  min-width: calc(40px + 8px + var(--switch-label-w));
 }
 
 .switch-container input {
-  display: none
+  display: none;
 }
 
 .slider {
@@ -292,48 +343,27 @@ img {
 }
 
 .switch-container input:checked+.slider {
-  background: #4CAF50
+  background: #4CAF50;
 }
 
 .switch-container input:checked+.slider::before {
-  transform: translateX(20px)
+  transform: translateX(20px);
 }
-
-/* Prevent layout shift when the toggle label text changes */
-.filters-and-rooms {
-  --switch-label-w: 16ch;
-}
-
-/* fits "Available Only" comfortably */
 
 .switch-container .label-text {
   display: inline-block;
   width: var(--switch-label-w);
-  /* reserve space so the list/cards don't jump */
   white-space: nowrap;
-  /* keep it on one line */
   overflow: hidden;
-  /* if it ever gets longer, trim */
   text-overflow: ellipsis;
-  /* … instead of wrapping/pushing */
-}
-
-/* (Optional) also reserve the container width so the switch + label is stable */
-.switch-container {
-  min-width: calc(40px
-      /*slider*/
-      + 8px
-      /*gap*/
-      + var(--switch-label-w));
-}
-
-
-.label-text {
   font-weight: 700;
   color: #333;
-  pointer-events: none
+  pointer-events: none;
 }
 
+/* =========================================
+   ROOMS — GRID + CARDS
+   ========================================= */
 .room-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -352,36 +382,36 @@ img {
 }
 
 .room-card:hover {
-  transform: translateY(-4px)
+  transform: translateY(-4px);
 }
 
 .room-card img {
   width: 100%;
   height: 160px;
-  object-fit: cover
+  object-fit: cover;
 }
 
 .room-card-content {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: .5rem
+  gap: .5rem;
 }
 
 .room-card-content h4 {
   font-size: 1rem;
   margin-bottom: .25rem;
-  color: var(--green)
+  color: var(--green);
 }
 
 .room-card-content p {
   margin: 0;
   font-size: .9rem;
-  color: #444
+  color: #444;
 }
 
 .room-card-content .highlight {
-  font-weight: 700
+  font-weight: 700;
 }
 
 .status {
@@ -394,26 +424,24 @@ img {
 
 .status.available {
   background: #c8e6c9;
-  color: #256029
+  color: #256029;
 }
 
 .status.occupied {
   background: #ffcdd2;
-  color: #b71c1c
+  color: #b71c1c;
 }
 
-/* selected-card hint */
 .room-card.is-active {
   outline: 3px solid #cfe8d0;
   outline-offset: 2px;
-  border-radius: 8px
+  border-radius: 8px;
 }
 
-/* =========================
+/* =========================================
    DETAILS PANEL (inline grow)
-   ========================= */
+   ========================================= */
 .room-panel {
-  /* hidden by default; JS toggles .is-open */
   display: none;
   margin-top: 16px;
   background: #fff;
@@ -426,17 +454,19 @@ img {
 .room-panel.is-open {
   display: block;
   animation: growIn .28s ease;
+  position: sticky;
+  top: var(--sticky-offset);
 }
 
 @keyframes growIn {
   from {
     transform: scale(.98);
-    opacity: 0
+    opacity: 0;
   }
 
   to {
     transform: scale(1);
-    opacity: 1
+    opacity: 1;
   }
 }
 
@@ -451,7 +481,7 @@ img {
 
 .room-title {
   font-size: 1.1rem;
-  font-weight: 700
+  font-weight: 700;
 }
 
 .room-close {
@@ -459,12 +489,12 @@ img {
   border: 0;
   background: transparent;
   color: #fff;
-  cursor: pointer
+  cursor: pointer;
 }
 
 .room-close:focus-visible {
   outline: 2px solid var(--green);
-  outline-offset: 2px
+  outline-offset: 2px;
 }
 
 .room-panel__content {
@@ -475,6 +505,7 @@ img {
   align-items: start;
 }
 
+/* Left: info */
 .room-info {
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -488,33 +519,33 @@ img {
 .kv {
   display: grid;
   gap: 8px;
-  margin: 10px 0 14px
+  margin: 10px 0 14px;
 }
 
 .kv div {
   display: flex;
   gap: 8px;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 .kv dt {
   font-weight: 600;
-  color: #374151
+  color: #374151;
 }
 
 .kv dd {
   margin: 0;
-  color: #111
+  color: #111;
 }
 
 .desc,
 .adv {
-  color: #333
+  color: #333;
 }
 
 .muted {
   color: #6b7280;
-  font-size: .9rem
+  font-size: .9rem;
 }
 
 .btn-inquire {
@@ -527,11 +558,12 @@ img {
   cursor: pointer;
 }
 
+/* Center: hero */
 .room-hero {
   margin: 0;
   display: grid;
   gap: 8px;
-  align-content: start
+  align-content: start;
 }
 
 .hero-img {
@@ -543,28 +575,21 @@ img {
   background: #ddd;
 }
 
-/* Right-side thumbs: scroll when there are many */
+/* Right: thumbs */
 .thumbs {
   display: grid;
   gap: 10px;
   align-content: start;
   align-self: start;
-  /* align with top of hero */
   max-height: var(--hero-h-max);
-  /* match hero clamp */
   overflow: auto;
-  /* <— scrolls vertically */
   padding-right: 6px;
-  /* room for scrollbar */
   scrollbar-gutter: stable;
-  /* avoid layout shift */
   overscroll-behavior: contain;
-  /* tame scroll chaining */
 }
 
-/* (nice-to-have) thinner scrollbar on WebKit browsers */
 .thumbs::-webkit-scrollbar {
-  width: 8px
+  width: 8px;
 }
 
 .thumbs::-webkit-scrollbar-thumb {
@@ -582,22 +607,22 @@ img {
 }
 
 .thumbs .thumb.is-active {
-  border-color: var(--green)
+  border-color: var(--green);
 }
 
 .thumbs .thumb:focus-visible {
   outline: 2px solid var(--green);
-  outline-offset: 2px
+  outline-offset: 2px;
 }
 
 .thumbs img {
   width: 100%;
   height: 110px;
   object-fit: cover;
-  border-radius: 8px
+  border-radius: 8px;
 }
 
-/* 360 viewer box, same size as your hero image */
+/* 360 viewer */
 .pano-viewer {
   width: 100%;
   height: var(--hero-h);
@@ -609,10 +634,9 @@ img {
 }
 
 .pano-viewer.is-on {
-  display: block
+  display: block;
 }
 
-/* little "360°" badge on thumbnails */
 .tag-360 {
   position: absolute;
   top: 6px;
@@ -626,74 +650,59 @@ img {
   pointer-events: none;
 }
 
-/* =========================
+/* =========================================
    ACCESSIBILITY / MOTION
-   ========================= */
-@media (prefers-reduced-motion: reduce) {
+   ========================================= */
+@media (prefers-reduced-motion:reduce) {
   .search-bar {
-    transition: none
+    transition: none;
   }
 
   .room-panel.is-open {
-    animation: none
+    animation: none;
   }
 }
 
-/* ===== DESKTOP SPLIT VIEW (cards left, panel right) — FINAL ===== */
-
-/* we'll set --sticky-offset from JS so heights are exact under the fixed header */
+/* =========================================
+   DESKTOP SPLIT VIEW (filters above list | panel right)
+   ========================================= */
 .filters-and-rooms {
-  --panel-bottom-gap: 0px;
-  /* keep 0 so no extra bottom space */
+  --sticky-offset: var(--sticky-offset);
 }
 
-/* 2-column split */
+/* reference var for clarity */
+
 .filters-and-rooms.is-split {
   display: grid;
-  grid-template-columns: 320px 1fr;
-  /* left width — tweak if needed */
+  grid-template-columns: minmax(280px, 420px) minmax(700px, 1fr);
+  /* left thinner, right wider */
   grid-template-areas:
     "filters panel"
     "list    panel";
-  gap: 12px 16px;
+  gap: 12px 20px;
+  /* row gap ties to JS bottom alignment */
   align-items: start;
   align-content: start;
-  /* avoid vertical stretching */
 }
 
-/* Place elements */
+/* Left: filters (sticky) */
 .filters-and-rooms.is-split .room-filters {
   grid-area: filters;
   position: sticky;
   top: var(--sticky-offset);
   z-index: 1;
+  padding-right: 6px;
+  /* room for list scrollbar below */
 }
 
+/* Left: list (own scrollbar; height matched to panel via JS) */
 .filters-and-rooms.is-split .room-list {
   grid-area: list;
-}
-
-.filters-and-rooms.is-split .room-panel {
-  grid-area: panel;
-  margin-top: 0;
-}
-
-/* Right column: pinned and scrolls inside if needed */
-.filters-and-rooms.is-split .room-panel {
-  position: sticky;
-  top: var(--sticky-offset);
-  overflow: auto;
-}
-
-/* Left column: its own scroller; stack cards vertically */
-.filters-and-rooms.is-split .room-list {
   overflow-y: auto;
   display: flex;
-  /* overrides your default grid layout */
   flex-direction: column;
   gap: 12px;
   padding-right: 6px;
-  /* room for scrollbar */
   scrollbar-gutter: stable;
 }
 
@@ -702,147 +711,53 @@ img {
   width: 100%;
 }
 
-/* Hide the tabs row (Home / Room Available / FAQs) only while panel is open */
+/* Right: details panel (sticky) */
+.filters-and-rooms.is-split .room-panel {
+  grid-area: panel;
+  margin-top: 0;
+  position: sticky;
+  top: var(--sticky-offset);
+  overflow: auto;
+}
+
+/* Hide the tabs row only while panel is open */
 body.details-open .search-bar {
   display: none !important;
 }
 
-/* Tighter container just for the Rooms section */
+/* Tight container for Rooms section only */
 #rooms .container {
-  padding-left: 0px;
-  /* was 16px globally */
-  padding-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-/* === Hamburger popover (anchored to the white pill) === */
-.top-nav .nav-icons {
-  position: relative;
-}
-
-/* anchor for absolute popover */
-
-.menu-popover [hidden],
-[hidden] {
-  display: none !important;
-}
-
-.menu-popover {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
-  padding: 8px;
-  min-width: 160px;
-  z-index: 1001;
-}
-
-.menu-popover button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 10px 12px;
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
-  color: #111;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.menu-popover button:hover,
-.menu-popover button:focus-visible {
-  background: rgba(0, 0, 0, .06);
-  outline: none;
-}
-
-/* === Sign-in dialog === */
-#authDialog {
-  border: 0;
-  border-radius: 16px;
-  padding: 20px;
-  width: 360px;
-  max-width: calc(100vw - 32px);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
-}
-
-#authDialog::backdrop {
-  background: rgba(0, 0, 0, .35);
-}
-
-.auth-form {
-  display: grid;
-  gap: 14px;
-}
-
-.auth-form h3 {
-  margin: 0 0 6px;
-  color: var(--green);
-}
-
-.field {
-  display: grid;
-  gap: 6px;
-}
-
-.field input {
-  padding: 10px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 6px;
-}
-
-.btn {
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 0;
-  cursor: pointer;
-}
-
-.btn.ghost {
-  background: #f3f4f6;
-}
-
-.btn.primary {
-  background: var(--green);
-  color: #fff;
-}
-
-/* === Login dialog (matches screenshot) === */
-.login-dialog {
+/* =========================================
+   AUTH DIALOGS
+   ========================================= */
+dialog.login-dialog,
+dialog.register-dialog {
   border: 0;
   border-radius: 14px;
   padding: 22px 22px 18px;
   width: 380px;
   max-width: calc(100vw - 32px);
   max-height: calc(100vh - 32px);
-  /* avoid overflowing the viewport */
   overflow: auto;
-
   background: #fff;
   box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
-
   position: fixed;
-  /* center within the viewport */
   inset: 0;
-  /* top:0 right:0 bottom:0 left:0 */
   margin: auto;
-  /* this + inset centers the dialog */
+  /* center */
 }
 
-.login-dialog::backdrop {
+dialog.login-dialog::backdrop,
+dialog.register-dialog::backdrop {
   background: rgba(0, 0, 0, .35);
 }
 
-.login-dialog h3 {
+.login-dialog h3,
+.register-dialog h3 {
   margin: 6px 0 18px;
   text-align: center;
   color: var(--green);
@@ -879,7 +794,6 @@ body.details-open .search-bar {
   padding: 10px 14px;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  /* pill-like */
   font-size: 14px;
   background: #fff;
   outline: none;
@@ -919,7 +833,6 @@ body.details-open .search-bar {
   background: transparent;
   border: 0;
   color: #e11d48;
-  /* red link */
   cursor: pointer;
   padding: 4px 6px;
   border-radius: 8px;
@@ -929,36 +842,6 @@ body.details-open .search-bar {
   background: rgba(0, 0, 0, .04);
 }
 
-/* Register dialog (same look as login) */
-.register-dialog {
-  border: 0;
-  border-radius: 14px;
-  padding: 22px 22px 18px;
-  width: 380px;
-  max-width: calc(100vw - 32px);
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-  background: #fff;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
-  position: fixed;
-  inset: 0;
-  margin: auto;
-}
-
-.register-dialog::backdrop {
-  background: rgba(0, 0, 0, .35);
-}
-
-.register-dialog h3 {
-  margin: 6px 0 18px;
-  text-align: center;
-  color: var(--green);
-  font-size: 20px;
-  font-weight: 800;
-}
-
-/* you already have .dialog-close, .auth-form, .input-wrap input, .btn.primary.block from login;
-   they will apply here as well. Add the inline action + switch footer: */
 .input-with-action {
   position: relative;
 }
@@ -971,7 +854,6 @@ body.details-open .search-bar {
   background: transparent;
   border: 0;
   color: #5b5bd6;
-  /* purple, like the mock */
   font-weight: 600;
   cursor: pointer;
   padding: 2px 4px;
@@ -994,7 +876,6 @@ body.details-open .search-bar {
   background: transparent;
   border: 0;
   color: #2563eb;
-  /* blue link */
   cursor: pointer;
   padding: 0 2px;
   border-radius: 6px;
@@ -1002,11 +883,4 @@ body.details-open .search-bar {
 
 .switch-auth .link:hover {
   background: rgba(0, 0, 0, .04);
-}
-
-.menu-popover .menu-sep {
-  border: 0;
-  height: 1px;
-  background: #e9ecef;
-  margin: 6px 0;
 }
