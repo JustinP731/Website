@@ -1,5 +1,29 @@
 /* script.js — cleaned & organized */
 (() => {
+  // === Auth/menu refs
+  const menuBtn = document.getElementById("menuBtn");
+  const userMenu = document.getElementById("userMenu");
+  const menuLogin = document.getElementById("menuLogin");
+  const menuLogout = document.getElementById("menuLogout");
+  const menuRegister = document.getElementById("menuRegister"); // may not exist, ok
+  const authDialog = document.getElementById("authDialog");
+  const authForm = document.getElementById("authForm");
+  const authEmailInp = document.getElementById("authEmail");
+  const authPassInp = document.getElementById("authPass");
+  const authCloseBtn = document.querySelector("#authDialog .dialog-close");
+  const registerBtn = document.getElementById("registerBtn");
+  const userStatus = document.getElementById("userStatus"); // your yellow circle
+  const registerDialog = document.getElementById("registerDialog");
+  const regForm = document.getElementById("regForm");
+  const regEmail = document.getElementById("regEmail");
+  const regCode = document.getElementById("regCode");
+  const regPass = document.getElementById("regPass");
+  const regPass2 = document.getElementById("regPass2");
+  const regSend = document.getElementById("regSend");
+  const regToLogin = document.getElementById("regToLogin");
+  const regCloseBtn = registerDialog?.querySelector(".dialog-close");
+
+
   // ===== DOM: core nav/sections =====
   const homeBtn = document.getElementById("homeBtn");
   const logoBtn = document.getElementById("logoBtn");
@@ -39,6 +63,181 @@
     // robustly resolve "pngs/..." to "http://127.0.0.1:5500/public/pngs/..."
     return new URL(src, document.baseURI).href;
   }
+
+  // Persist a simple "logged in" state using localStorage
+  function getUser() {
+    try { return JSON.parse(localStorage.getItem("authUser")) || null; }
+    catch { return null; }
+  }
+  function setUser(u) { localStorage.setItem("authUser", JSON.stringify(u)); }
+  function clearUser() { localStorage.removeItem("authUser"); }
+
+  function updateAuthUI() {
+    const u = getUser();
+    const loggedIn = !!u;
+
+    // Hide Login + Register when logged in; show Logout only then
+    if (menuLogin) menuLogin.hidden = loggedIn;
+    if (menuRegister) menuRegister.hidden = loggedIn;
+    if (menuLogout) menuLogout.hidden = !loggedIn;
+
+    // Avatar letter / tooltip
+    if (userStatus) {
+      const letter = loggedIn && u?.name ? u.name.trim().charAt(0).toUpperCase() : "G";
+      userStatus.textContent = letter;
+      userStatus.title = loggedIn ? u.name : "Guest";
+    }
+  }
+
+
+  function toggleMenu(show) {
+    const isOpen = show ?? userMenu.hidden;
+    if (isOpen) {
+      userMenu.hidden = false;
+      menuBtn.setAttribute("aria-expanded", "true");
+      const firstVisible = [menuLogin, menuRegister, menuLogout].find(el => el && !el.hidden);
+      firstVisible?.focus();
+    } else {
+      userMenu.hidden = true;
+      menuBtn.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  // Open/close on button
+  menuBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMenu(userMenu.hidden); // toggle
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!userMenu.hidden && !userMenu.contains(e.target) && e.target !== menuBtn) {
+      toggleMenu(false);
+    }
+  });
+
+  // Keyboard: Esc closes, ArrowDown focuses first item
+  menuBtn.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") { e.preventDefault(); toggleMenu(true); }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") toggleMenu(false);
+  });
+
+  // Menu actions
+  menuLogin.addEventListener("click", () => {
+    toggleMenu(false);
+    if (authEmailInp) authEmailInp.value = "";
+    if (authPassInp) authPassInp.value = "";
+    authDialog.showModal();
+    authEmailInp?.focus();
+  });
+
+  menuLogout.addEventListener("click", () => {
+    clearUser();
+    updateAuthUI();
+    toggleMenu(false);
+  });
+
+  authCloseBtn?.addEventListener("click", () => authDialog.close());
+  registerBtn?.addEventListener("click", () => {
+    authDialog.close();
+    regEmail && (regEmail.value = "");
+    regCode && (regCode.value = "");
+    regPass && (regPass.value = "");
+    regPass2 && (regPass2.value = "");
+    registerDialog.showModal();
+    regEmail?.focus();
+  });
+
+  menuRegister?.addEventListener("click", () => {
+    toggleMenu(false);
+    regEmail && (regEmail.value = "");
+    regCode && (regCode.value = "");
+    regPass && (regPass.value = "");
+    regPass2 && (regPass2.value = "");
+    registerDialog.showModal();
+    regEmail?.focus();
+  });
+
+  regCloseBtn?.addEventListener("click", () => registerDialog.close());
+
+  regToLogin?.addEventListener("click", () => {
+    registerDialog.close();
+    authDialog.showModal();
+  });
+
+  let regCountdown = null, regTimeLeft = 0;
+
+  function startOtpCountdown(seconds = 60) {
+    regTimeLeft = seconds;
+    regSend.disabled = true;
+    regSend.textContent = `${regTimeLeft}s`;
+    regCountdown = setInterval(() => {
+      regTimeLeft -= 1;
+      regSend.textContent = `${regTimeLeft}s`;
+      if (regTimeLeft <= 0) {
+        clearInterval(regCountdown);
+        regCountdown = null;
+        regSend.disabled = false;
+        regSend.textContent = "Send";
+      }
+    }, 1000);
+  }
+
+  regSend?.addEventListener("click", () => {
+    const email = (regEmail?.value || "").trim();
+    const okEmail = /^\S+@\S+\.\S+$/.test(email);
+    if (!okEmail) { alert("Please enter a valid email first."); regEmail?.focus(); return; }
+
+    // TODO: call your backend to send a code to the email.
+    // For now, just start a 60s resend countdown.
+    startOtpCountdown(60);
+  });
+
+  regForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = (regEmail?.value || "").trim().toLowerCase();
+    const code = (regCode?.value || "").trim();
+    const p1 = regPass?.value || "";
+    const p2 = regPass2?.value || "";
+
+    if (!/^\S+@\S+\.\S+$/.test(email)) { alert("Please enter a valid email."); return; }
+    if (!code) { alert("Please enter the verification code."); return; }
+    if (!p1 || !p2) { return; }
+    if (p1.length < 4) { alert("Password must be at least 4 characters."); return; }
+    if (p1 !== p2) { alert("Passwords do not match."); return; }
+
+    // TODO: verify code/password server-side; for now we just “succeed”
+    const base = email.split("@")[0];
+    const display = base ? base.charAt(0).toUpperCase() + base.slice(1) : "User";
+    setUser({ name: display, email });
+
+    updateAuthUI();
+    registerDialog.close();
+  });
+
+  // Handle dialog submit
+  authForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = (authEmailInp?.value || "").trim().toLowerCase();
+    const pass = (authPassInp?.value || "").trim();
+    if (!email || !pass) return;
+
+    // very light email check for UX (server-side validation still recommended)
+    const okEmail = /^\S+@\S+\.\S+$/.test(email);
+    if (!okEmail) { alert("Please enter a valid email."); return; }
+
+    // Demo auth: accept any non-empty email/password.
+    // Derive a display name from the part before @
+    const base = email.split("@")[0];
+    const display = base ? base.charAt(0).toUpperCase() + base.slice(1) : "User";
+
+    setUser({ name: display, email });
+    updateAuthUI();
+    authDialog.close();
+  });
+
 
   // HEIGHT SYNC — make .room-list match the panel's actual rendered height
   let panelResizeObs = null;
@@ -418,7 +617,7 @@
     panelResizeObs.observe(panel);
     window.addEventListener('resize', syncSplitHeights);
 
-    panel.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest"});
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
   }
 
   function closePanel() {
@@ -512,7 +711,6 @@
     });
   }
 
-
   // ===== Boot sequence =====
   function boot() {
     // label text
@@ -539,19 +737,7 @@
     showSection("home");
   }
 
-  // ===== Simulate login badge (kept from your code) =====
-  (function updateUserBadge() {
-    const userStatus = document.getElementById("userStatus");
-    const isLoggedIn = false; // flip to true for tenant
-    if (isLoggedIn) {
-      userStatus.textContent = "T";
-      userStatus.title = "Tenant";
-    } else {
-      userStatus.textContent = "G";
-      userStatus.title = "Guest";
-    }
-  })();
-
   // go!
+  updateAuthUI();
   boot();
 })();
