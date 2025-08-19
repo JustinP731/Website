@@ -49,7 +49,6 @@
       <div id="userMenu" class="menu-popover" role="menu" aria-labelledby="menuBtn" hidden>
         <button id="menuLogin" role="menuitem" type="button">Log in</button>
         <button id="menuRegister" role="menuitem" type="button">Register</button>
-        <hr class="menu-sep" aria-hidden="true">
         <button id="menuLogout" role="menuitem" type="button">Log out</button>
       </div>
 
@@ -63,23 +62,22 @@
       <h3 id="inqTitle">Request To Rent</h3>
 
       <form id="inquireForm" class="inq-form" method="dialog" novalidate>
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Please enter your contact number.">
           <label for="inqPhone" class="visually-hidden">Contact Number</label>
           <input id="inqPhone" name="phone" type="tel" placeholder="Contact Number" required>
         </div>
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Enter a valid email address.">
           <label for="inqEmail" class="visually-hidden">Email</label>
           <input id="inqEmail" name="email" type="email" placeholder="Email" required>
         </div>
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Name is required.">
           <label for="inqName" class="visually-hidden">Name</label>
           <input id="inqName" name="name" type="text" placeholder="Name" required>
         </div>
 
-        <div class="input-wrap with-icon">
+        <div class="input-wrap with-icon" data-err="Pick a date.">
           <label for="inqDate" class="visually-hidden">Preferred Date</label>
           <input id="inqDate" name="date" type="date" required>
-          <span class="calendar-icon" aria-hidden="true">📅</span>
         </div>
 
         <input type="hidden" id="inqRoomId" name="roomId">
@@ -93,12 +91,12 @@
       <h3 id="authTitle">Account Log In</h3>
 
       <form id="authForm" class="auth-form" method="dialog" novalidate>
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Enter a valid email.">
           <label for="authEmail" class="visually-hidden">Email</label>
           <input id="authEmail" name="email" type="email" placeholder="Email" autocomplete="email" required>
         </div>
 
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Password is required.">
           <label for="authPass" class="visually-hidden">Password</label>
           <input id="authPass" name="password" type="password" placeholder="Password" autocomplete="current-password"
             required>
@@ -120,25 +118,25 @@
       <h3 id="regTitle">Account Register</h3>
 
       <form id="regForm" class="auth-form" method="dialog" novalidate>
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Enter a valid email.">
           <label for="regEmail" class="visually-hidden">Email</label>
           <input id="regEmail" name="email" type="email" placeholder="Email" autocomplete="email" required>
         </div>
 
-        <div class="input-wrap input-with-action">
+        <div class="input-wrap input-with-action" data-err="Enter the code we sent.">
           <label for="regCode" class="visually-hidden">Verification Code</label>
           <input id="regCode" name="code" type="text" placeholder="Verification Code" inputmode="numeric" required>
           <button type="button" id="regSend" class="inline-action" aria-controls="regCode"
             aria-label="Send verification code to email">Send</button>
         </div>
 
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Create a password.">
           <label for="regPass" class="visually-hidden">Password</label>
           <input id="regPass" name="password" type="password" placeholder="Enter password" autocomplete="new-password"
             required>
         </div>
 
-        <div class="input-wrap">
+        <div class="input-wrap" data-err="Re-enter your password.">
           <label for="regPass2" class="visually-hidden">Re-enter password</label>
           <input id="regPass2" name="password_confirm" type="password" placeholder="Re-Enter password"
             autocomplete="new-password" required>
