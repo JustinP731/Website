@@ -70,18 +70,43 @@ img {
   height: 40px
 }
 
+/* Top-right capsule container */
 .nav-icons {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 1rem
+  gap: 10px;
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 9999px;
+  /* pill */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .15);
 }
 
+/* Hamburger inside the white capsule */
 .menu-btn {
-  font-size: 24px;
-  background: none;
-  color: #fff;
+  font-size: 18px;
+  /* smaller like the screenshot */
+  background: transparent;
+  color: #111;
+  /* dark icon on white pill */
   border: 0;
-  cursor: pointer
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 8px;
+  /* subtle hover rounding */
+  cursor: pointer;
+}
+
+.menu-btn:hover {
+  background: rgba(0, 0, 0, .06);
+}
+
+.menu-btn:focus-visible {
+  outline: 2px solid #0b5;
+  /* accessible focus ring */
+  outline-offset: 2px;
 }
 
 .profile-circle {
@@ -91,10 +116,13 @@ img {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  line-height: 1;
   user-select: none;
+  box-shadow: none;
+  /* keep it flat like the screenshot */
 }
 
 .hero-image {
@@ -684,4 +712,301 @@ body.details-open .search-bar {
   padding-left: 0px;
   /* was 16px globally */
   padding-right: 0px;
+}
+
+/* === Hamburger popover (anchored to the white pill) === */
+.top-nav .nav-icons {
+  position: relative;
+}
+
+/* anchor for absolute popover */
+
+.menu-popover [hidden],
+[hidden] {
+  display: none !important;
+}
+
+.menu-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+  padding: 8px;
+  min-width: 160px;
+  z-index: 1001;
+}
+
+.menu-popover button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: #111;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.menu-popover button:hover,
+.menu-popover button:focus-visible {
+  background: rgba(0, 0, 0, .06);
+  outline: none;
+}
+
+/* === Sign-in dialog === */
+#authDialog {
+  border: 0;
+  border-radius: 16px;
+  padding: 20px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
+}
+
+#authDialog::backdrop {
+  background: rgba(0, 0, 0, .35);
+}
+
+.auth-form {
+  display: grid;
+  gap: 14px;
+}
+
+.auth-form h3 {
+  margin: 0 0 6px;
+  color: var(--green);
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field input {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 0;
+  cursor: pointer;
+}
+
+.btn.ghost {
+  background: #f3f4f6;
+}
+
+.btn.primary {
+  background: var(--green);
+  color: #fff;
+}
+
+/* === Login dialog (matches screenshot) === */
+.login-dialog {
+  border: 0;
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  /* avoid overflowing the viewport */
+  overflow: auto;
+
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
+
+  position: fixed;
+  /* center within the viewport */
+  inset: 0;
+  /* top:0 right:0 bottom:0 left:0 */
+  margin: auto;
+  /* this + inset centers the dialog */
+}
+
+.login-dialog::backdrop {
+  background: rgba(0, 0, 0, .35);
+}
+
+.login-dialog h3 {
+  margin: 6px 0 18px;
+  text-align: center;
+  color: var(--green);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialog-close:hover {
+  background: rgba(0, 0, 0, .06);
+}
+
+.auth-form {
+  display: grid;
+  gap: 14px;
+}
+
+.input-wrap input {
+  width: 100%;
+  height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  /* pill-like */
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .02) inset;
+}
+
+.input-wrap input:focus {
+  border-color: #c1d5c1;
+  box-shadow: 0 0 0 3px rgba(47, 75, 47, .12);
+}
+
+.btn.primary.block {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: var(--green);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+}
+
+.register-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.register-row .line {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.register-row .link {
+  background: transparent;
+  border: 0;
+  color: #e11d48;
+  /* red link */
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.register-row .link:hover {
+  background: rgba(0, 0, 0, .04);
+}
+
+/* Register dialog (same look as login) */
+.register-dialog {
+  border: 0;
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
+  position: fixed;
+  inset: 0;
+  margin: auto;
+}
+
+.register-dialog::backdrop {
+  background: rgba(0, 0, 0, .35);
+}
+
+.register-dialog h3 {
+  margin: 6px 0 18px;
+  text-align: center;
+  color: var(--green);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* you already have .dialog-close, .auth-form, .input-wrap input, .btn.primary.block from login;
+   they will apply here as well. Add the inline action + switch footer: */
+.input-with-action {
+  position: relative;
+}
+
+.inline-action {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: #5b5bd6;
+  /* purple, like the mock */
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+
+.inline-action:disabled {
+  color: #9ca3af;
+  cursor: default;
+}
+
+.switch-auth {
+  text-align: center;
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.switch-auth .link {
+  background: transparent;
+  border: 0;
+  color: #2563eb;
+  /* blue link */
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 6px;
+}
+
+.switch-auth .link:hover {
+  background: rgba(0, 0, 0, .04);
+}
+
+.menu-popover .menu-sep {
+  border: 0;
+  height: 1px;
+  background: #e9ecef;
+  margin: 6px 0;
 }
