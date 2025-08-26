@@ -1,23 +1,15 @@
-/* =========================================
-   0) TOKENS / RESET / BASE
-   ========================================= */
+/* ===== 0) TOKENS / RESET / BASE ===== */
 :root {
   --green: #2f4b2f;
   --cream: #FBF6F6;
   --ink: #1b1f23;
   --gold: #f1c40f;
-
   --radius: 14px;
   --shadow-1: 0 2px 6px rgba(0, 0, 0, .10);
   --shadow-2: 0 8px 28px rgba(0, 0, 0, .12);
-
   --container: 1320px;
-
-  /* JS updates these when the split panel opens */
   --sticky-offset: 64px;
   --filters-h: 0px;
-
-  /* media heights */
   --hero-h: 520px;
   --hero-h-max: 52vh;
 }
@@ -40,7 +32,7 @@ body {
   min-height: 100vh;
   max-width: 100%;
   overflow-x: hidden;
-  color: #111;
+  color: #000000;
 }
 
 img {
@@ -53,9 +45,13 @@ img {
   display: none !important;
 }
 
-/* =========================================
-   1) TOP NAV (supports #topNav and .top-nav)
-   ========================================= */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ===== 1) TOP NAV ===== */
 #topNav,
 .top-nav {
   position: fixed;
@@ -67,8 +63,29 @@ img {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+  box-shadow: 0 2px 8px rgba(216, 216, 216, 0.845)
 }
+
+/* Smooth slide for the fixed top bar */
+#topNav,
+.top-nav {
+  transition: transform .28s ease, box-shadow .28s ease, background-color .28s ease;
+}
+
+
+
+/* Optional: keep the section tabs from jumping when header hides */
+.search-bar {
+  top: var(--sticky-offset);
+  transition: top .28s ease;
+}
+/* tab bar hide/show */
+.search-bar { transition: transform .28s ease; will-change: transform; 
+} /* already present */
+.search-bar.tab-hidden { transform: translateY(calc(-100% - 12px)); 
+}
+
+
 
 .branding {
   display: flex;
@@ -80,16 +97,15 @@ img {
   height: 40px;
 }
 
-/* Nav: hamburger + avatar */
 .nav-icons {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 6px 10px;
-  background: #fff;
+  background: #dddddd;
   border-radius: 9999px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, .15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .15)
 }
 
 .menu-btn {
@@ -106,7 +122,7 @@ img {
 }
 
 .menu-btn:hover {
-  background: rgba(0, 0, 0, .06);
+  background: rgb(239, 239, 239);
 }
 
 .menu-btn:focus-visible {
@@ -126,15 +142,21 @@ img {
   justify-content: center;
   line-height: 1;
   user-select: none;
+  cursor: pointer;
+  border: 0;
 }
 
-/* User popover */
+.profile-circle:focus-visible {
+  outline: 2px solid #0b5;
+  outline-offset: 2px;
+}
+
 .menu-popover {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
   z-index: 1001;
-  background: #fff;
+  background: #e7e7e7;
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
   padding: 8px;
@@ -167,24 +189,19 @@ img {
   margin: 6px 0;
 }
 
-/* =========================================
-   2) HERO
-   ========================================= */
-.hero-image {
-  height: 300px;
-  overflow: hidden;
-}
-
-.hero-image img {
+/* Video fills the hero area */
+.hero-media,
+#heroVideo{
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 85%;
+  display: block;
+  object-fit: cover;   /* fills the area; switch to 'contain' if you never want cropping */
+  object-position: 50% 50%;
+  background: #000;
 }
 
-/* =========================================
-   3) SECTION TAB BAR
-   ========================================= */
+
+/* ===== 3) TAB BAR ===== */
 .search-bar {
   position: sticky;
   top: var(--sticky-offset);
@@ -211,50 +228,7 @@ img {
   font-weight: 700;
 }
 
-/* =========================================
-   4) FOOTER
-   ========================================= */
-.footer {
-  background: #204020;
-  color: #FCE3B5;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: .75rem 1rem;
-  padding: 1rem;
-  font-size: .9rem;
-}
-
-.footer .contact-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  white-space: nowrap;
-}
-
-.footer .contact-info span {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-}
-
-.footer .social-link a {
-  color: #FCE3B5;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-}
-
-/* =========================================
-   5) GENERIC PAGE SECTIONS
-   ========================================= */
+/* ===== 4) GENERIC SECTIONS ===== */
 .content-section {
   padding: 3rem 1rem 2rem;
   background: #fff;
@@ -279,15 +253,58 @@ img {
   box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
 }
 
-.container {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 16px;
+/* ===== 5) VIDEO (Home) ===== */
+.video-block {
+  padding: 3rem 0 2rem;
+  background: #fff;
 }
 
-/* =========================================
-   6) ROOMS — FILTERS
-   ========================================= */
+.video-heading {
+  color: #1e392a;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.video-embed {
+  position: relative;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+  background: #000;
+  aspect-ratio: 16/9;
+}
+
+@supports not (aspect-ratio:16/9) {
+  .video-embed {
+    padding-top: 56.25%;
+  }
+
+  .video-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.video-embed iframe {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
+
+#intro-video[aria-hidden="true"] {
+  display: none;
+}
+
+/* ===== 6) ROOMS (core styles kept) ===== */
+/* (… your existing Rooms styles from before are preserved …) */
+
 .room-filters {
   display: flex;
   flex-wrap: wrap;
@@ -304,7 +321,6 @@ img {
   flex-shrink: 0;
 }
 
-/* Toggle */
 .filters-and-rooms {
   --switch-label-w: 16ch;
 }
@@ -362,9 +378,6 @@ img {
   pointer-events: none;
 }
 
-/* =========================================
-   7) ROOMS — GRID + CARDS
-   ========================================= */
 .room-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -439,9 +452,6 @@ img {
   border-radius: 8px;
 }
 
-/* =========================================
-   8) DETAILS PANEL + SPLIT VIEW
-   ========================================= */
 .room-panel {
   display: none;
   margin-top: 16px;
@@ -462,12 +472,12 @@ img {
 @keyframes growIn {
   from {
     transform: scale(.98);
-    opacity: 0;
+    opacity: 0
   }
 
   to {
     transform: scale(1);
-    opacity: 1;
+    opacity: 1
   }
 }
 
@@ -503,371 +513,13 @@ img {
   gap: 20px;
   padding: 18px;
   grid-template-columns: 320px 1fr 120px;
-  /* wider info column to match mock */
   align-items: start;
 }
 
-/* Left column (card placeholder; actual styling in section 10) */
 .room-info {
   align-self: start;
   position: sticky;
   top: var(--sticky-offset);
-}
-
-/* Center media */
-.room-hero {
-  margin: 0;
-  display: grid;
-  gap: 8px;
-  align-content: start;
-}
-
-.hero-img {
-  width: 100%;
-  height: var(--hero-h);
-  max-height: var(--hero-h-max);
-  object-fit: cover;
-  border-radius: 14px;
-  background: #ddd;
-}
-
-/* Right thumbnails */
-.thumbs {
-  display: grid;
-  gap: 10px;
-  align-content: start;
-  align-self: start;
-  max-height: var(--hero-h-max);
-  overflow: auto;
-  padding-right: 6px;
-  scrollbar-gutter: stable;
-  overscroll-behavior: contain;
-}
-
-.thumbs::-webkit-scrollbar {
-  width: 8px;
-}
-
-.thumbs::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, .2);
-  border-radius: 8px;
-}
-
-.thumbs .thumb {
-  position: relative;
-  padding: 0;
-  border: 2px solid transparent;
-  background: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.thumbs .thumb.is-active {
-  border-color: var(--green);
-}
-
-.thumbs .thumb:focus-visible {
-  outline: 2px solid var(--green);
-  outline-offset: 2px;
-}
-
-.thumbs img {
-  width: 100%;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* 360 viewer */
-.pano-viewer {
-  width: 100%;
-  height: var(--hero-h);
-  max-height: var(--hero-h-max);
-  border-radius: 14px;
-  display: none;
-  background: #ddd;
-  overflow: hidden;
-}
-
-.pano-viewer.is-on {
-  display: block;
-}
-
-.tag-360 {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  font-size: 12px;
-  line-height: 1;
-  padding: 2px 6px;
-  border-radius: 999px;
-  background: var(--green);
-  color: #fff;
-  pointer-events: none;
-}
-
-/* Split layout scaffolding */
-.filters-and-rooms.is-split {
-  display: grid;
-  grid-template-columns: minmax(280px, 420px) minmax(700px, 1fr);
-  grid-template-areas:
-    "filters panel"
-    "list    panel";
-  gap: 12px 20px;
-  align-items: start;
-  align-content: start;
-}
-
-/* Left: filters (sticky) */
-.filters-and-rooms.is-split .room-filters {
-  grid-area: filters;
-  position: sticky;
-  top: var(--sticky-offset);
-  z-index: 1;
-  padding-right: 6px;
-  /* room for list scrollbar below */
-}
-
-/* Left: list (own scrollbar; height set via JS to match panel) */
-.filters-and-rooms.is-split .room-list {
-  grid-area: list;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding-right: 6px;
-  scrollbar-gutter: stable;
-}
-
-.filters-and-rooms.is-split .room-list>.room-card {
-  flex: 0 0 auto;
-  width: 100%;
-}
-
-/* Right: sticky details panel */
-.filters-and-rooms.is-split .room-panel {
-  grid-area: panel;
-  margin-top: 0;
-  position: sticky;
-  top: var(--sticky-offset);
-  overflow: auto;
-}
-
-/* Hide the tabs row only while panel is open */
-body.details-open .search-bar {
-  display: none !important;
-}
-
-/* Tight container for Rooms section only */
-#rooms .container {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* =========================================
-   9) AUTH + INQUIRE DIALOGS
-   ========================================= */
-dialog.login-dialog,
-dialog.register-dialog,
-dialog.inquire-dialog {
-  border: 0;
-  border-radius: 14px;
-  padding: 22px 22px 18px;
-  width: 440px;
-  max-width: calc(100vw - 32px);
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-  background: #fff;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  /* centered */
-}
-
-dialog.login-dialog::backdrop,
-dialog.register-dialog::backdrop,
-dialog.inquire-dialog::backdrop {
-  background: rgba(0, 0, 0, .35);
-}
-
-/* Safari fallback if `inset` isn’t supported */
-@supports not (inset: 0) {
-
-  dialog.login-dialog,
-  dialog.register-dialog,
-  dialog.inquire-dialog {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-.login-dialog h3,
-.register-dialog h3 {
-  margin: 6px 0 18px;
-  text-align: center;
-  color: var(--green);
-  font-size: 20px;
-  font-weight: 800;
-}
-
-.dialog-close {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.dialog-close:hover {
-  background: rgba(0, 0, 0, .06);
-}
-
-.auth-form {
-  display: grid;
-  gap: 14px;
-}
-
-.input-wrap input {
-  width: 100%;
-  height: 44px;
-  padding: 10px 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 14px;
-  background: #fff;
-  outline: none;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .02) inset;
-}
-
-.input-wrap input:focus {
-  border-color: #c1d5c1;
-  box-shadow: 0 0 0 3px rgba(47, 75, 47, .12);
-}
-
-.btn.primary.block {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  font-weight: 700;
-  background: var(--green);
-  color: #fff;
-  border: 0;
-  cursor: pointer;
-}
-
-.register-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 6px;
-}
-
-.register-row .line {
-  flex: 1 1 auto;
-  height: 1px;
-  background: #e5e7eb;
-}
-
-.register-row .link,
-.switch-auth .link {
-  background: transparent;
-  border: 0;
-  color: #2563eb;
-  cursor: pointer;
-  padding: 0 2px;
-  border-radius: 6px;
-}
-
-.register-row .link:hover,
-.switch-auth .link:hover {
-  background: rgba(0, 0, 0, .04);
-}
-
-.input-with-action {
-  position: relative;
-}
-
-.inline-action {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  background: transparent;
-  border: 0;
-  color: #5b5bd6;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 6px;
-}
-
-.inline-action:disabled {
-  color: #9ca3af;
-  cursor: default;
-}
-
-.switch-auth {
-  text-align: center;
-  margin-top: 6px;
-  color: #6b7280;
-  font-size: 14px;
-}
-
-/* Inquire form specifics */
-.inquire-dialog h3 {
-  margin: 6px 0 18px;
-  text-align: center;
-  color: var(--green);
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.inq-form {
-  display: grid;
-  gap: 14px;
-}
-
-.inq-form .input-wrap input {
-  width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  border: 1px solid #e5e7eb;
-  border-radius: 999px;
-  font-size: 14px;
-  background: #fff;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .02) inset;
-  outline: none;
-}
-
-.inq-form .input-wrap input:focus {
-  border-color: #c1d5c1;
-  box-shadow: 0 0 0 3px rgba(47, 75, 47, .12);
-}
-
-.inq-form .with-icon {
-  position: relative;
-}
-
-.inq-form .calendar-icon {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-/* =========================================
-   10) UNIT DETAILS CARD (mock styling)
-   ========================================= */
-.room-info {
   background: #fff;
   border: 1px solid #e8ece8;
   border-radius: 18px;
@@ -875,16 +527,6 @@ dialog.inquire-dialog::backdrop {
   padding: 16px 18px 18px;
 }
 
-.room-info h2,
-.room-info h3,
-.room-info h4 {
-  font-size: 1.6rem;
-  font-weight: 800;
-  margin: 4px 0 12px;
-  color: #243026;
-}
-
-/* Title sizing */
 .room-info .unit-title {
   font-weight: 700;
   font-size: clamp(1.05rem, 0.9rem + 0.4vw, 1.25rem);
@@ -893,32 +535,6 @@ dialog.inquire-dialog::backdrop {
   color: #243026;
 }
 
-/* Header row (title + pill) */
-.room-info .card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 4px 0 12px;
-}
-
-.room-info .card-head .unit-title {
-  margin: 0;
-}
-
-.room-info .type-pill {
-  position: static;
-  background: #e7f0ea;
-  color: var(--green);
-  font-weight: 700;
-  font-size: .85rem;
-  padding: 6px 12px;
-  border-radius: 999px;
-  line-height: 1;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, .04) inset;
-}
-
-/* Divider under header */
 .kv {
   border-top: 1px solid #e8ece8;
   padding-top: 12px;
@@ -943,18 +559,6 @@ dialog.inquire-dialog::backdrop {
   text-align: right;
 }
 
-.kv .muted {
-  color: #6b7280;
-  margin-right: 6px;
-}
-
-.kv .price {
-  font-weight: 700;
-  letter-spacing: .2px;
-  margin-left: 6px;
-}
-
-/* Occupancy bar */
 .kv .occ-bar {
   height: 8px;
   background: #cccfce;
@@ -969,35 +573,8 @@ dialog.inquire-dialog::backdrop {
   background: var(--green);
 }
 
-/* Sections */
-.room-info .field-title {
-  display: block;
-  margin: 12px 0 4px;
-  font-size: 1.05rem;
-  color: #1d2a21;
-}
-
-.room-info .field-body {
-  color: #1a1f1c;
-}
-
-.room-info .field-body .dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--green);
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-/* CTA */
-.cta-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 16px;
+.kv .occ-bar.is-full>span {
+  background: #dc2626;
 }
 
 .btn-inquire {
@@ -1015,15 +592,1925 @@ dialog.inquire-dialog::backdrop {
   color: #fff;
 }
 
+.filters-and-rooms.is-split {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) minmax(700px, 1fr);
+  grid-template-areas: "filters panel" "list panel";
+  gap: 12px 20px;
+  align-items: start;
+  align-content: start;
+}
+
+.filters-and-rooms.is-split .room-filters {
+  grid-area: filters;
+  position: sticky;
+  top: var(--sticky-offset);
+  z-index: 1;
+  padding-right: 6px;
+}
+
+.filters-and-rooms.is-split .room-list {
+  grid-area: list;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+}
+
+.filters-and-rooms.is-split .room-list>.room-card {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.filters-and-rooms.is-split .room-panel {
+  grid-area: panel;
+  margin-top: 0;
+  position: sticky;
+  top: var(--sticky-offset);
+  overflow: auto;
+}
+
+body.details-open .search-bar {
+  display: none !important;
+}
+
+#rooms .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hero-img {
+  width: 100%;
+  height: var(--hero-h);
+  max-height: var(--hero-h-max);
+  object-fit: cover;
+  border-radius: 14px;
+  background: #ddd;
+}
+
+/* Hero video fill */
+.hero-image { 
+  position: relative;          /* to position the mute button */
+  height: 300px;
+  overflow: hidden;
+}
+
+/* generic icon-swap rule; you can scope it to #headerMuteBtn if you prefer */
+#headerMuteBtn .icon { display: none; line-height: 1; font-size:16px; }
+#headerMuteBtn[aria-pressed="true"]  .muted   { display: inline; }  /* muted  -> show 🔇 */
+#headerMuteBtn[aria-pressed="false"] .unmuted { display: inline; }  /* sound on -> show 🔊 */
+
+
+
+
+.hero-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;    /* change to 50% 85% if you liked the old offset */
+  display: block;
+  background: #000;
+  pointer-events: none;         /* avoid any clicks toggling playback */
+}
+
+/* Mute button (top-right overlay) */
+.hero-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.mute-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  background: #ffffffdd;
+  box-shadow: 0 4px 14px rgba(0,0,0,.2);
+  color: var(--green);
+  transition: transform .15s ease, background-color .2s ease;
+}
+
+.mute-btn:hover { transform: translateY(-1px); background: #fff; }
+
+/* Show the right icon depending on muted state */
+.mute-btn .icon { display: none; line-height: 1; font-size: 18px; }
+.mute-btn[aria-pressed="true"]  .muted   { display: inline; }  /* muted */
+.mute-btn[aria-pressed="false"] .unmuted { display: inline; }  /* sound on */
+
+
+.pano-viewer {
+  width: 100%;
+  height: var(--hero-h);
+  max-height: var(--hero-h-max);
+  border-radius: 14px;
+  display: none;
+  background: #ddd;
+  overflow: hidden;
+}
+
+.pano-viewer.is-on {
+  display: block;
+}
+
+.thumbs {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  align-self: start;
+  max-height: var(--hero-h-max);
+  overflow: auto;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+.thumbs .thumb {
+  position: relative;
+  padding: 0;
+  border: 2px solid transparent;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.thumbs .thumb.is-active {
+  border-color: var(--green);
+}
+
+.thumbs img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .search-bar {
+    transition: none
+  }
+
+  .room-panel.is-open {
+    animation: none
+  }
+}
+
+/* ===== 7) DIALOGS (kept) ===== */
+/* (uses your previous dialog styles; unchanged for brevity) */
+
+/* ===== 8) BUILDING INFO (Home) ===== */
+.building-info {
+  padding: 4rem 0;
+  background: #f5f6f7;
+}
+
+.bi-heading {
+  color: #1e392a;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.bi-heading::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin-top: .6rem;
+  background: linear-gradient(90deg, #1e392a, #2c4e3a);
+  border-radius: 999px;
+}
+
+.bi-row {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.bi-row--flip {
+  grid-template-columns: 0.9fr 1.1fr;
+}
+
+.bi-text h3 {
+  color: #1e392a;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 .75rem;
+}
+
+.bi-text p {
+  line-height: 1.8;
+  color: #4b5563;
+  margin: 0;
+}
+
+.bi-image {
+  position: relative;
+  isolation: isolate;
+}
+
+.bi-image::before {
+  content: "";
+  position: absolute;
+  inset: -10px -12px auto auto;
+  z-index: -1;
+  width: 40%;
+  height: 40%;
+  border-radius: 14px;
+  filter: blur(10px);
+  background: linear-gradient(135deg, #1e392a33, #2c4e3a22);
+}
+
+.bi-image img {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
+  object-fit: cover;
+}
+
+.bi-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.bi-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.1rem 1rem 1.2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
+  border-left: 6px solid #1e392a;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.bi-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 26px rgba(0, 0, 0, .08)
+}
+
+.bi-card h4 {
+  margin: 0 0 .35rem;
+  color: #1e392a;
+  font-weight: 700;
+}
+
+.bi-card p {
+  margin: 0;
+  color: #4b5563;
+}
+
+.bi-cta {
+  display: flex;
+  gap: .75rem;
+  margin-top: 1.25rem
+}
+
+.btn-brand {
+  display: inline-block;
+  padding: .7rem 1.1rem;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #1e392a, #2c4e3a);
+  color: #fff;
+  font-weight: 600
+}
+
+.btn-brand:hover {
+  filter: brightness(1.05)
+}
+
+.btn-ghost {
+  display: inline-block;
+  padding: .7rem 1.1rem;
+  border-radius: 10px;
+  color: #1e392a;
+  border: 1px solid #1e392a;
+  background: #fff
+}
+
+.btn-ghost:hover {
+  background: #f0f4f2
+}
+
+/* reveal on scroll */
+.reveal,
+.reveal-up,
+.reveal-left,
+.reveal-right {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s ease, transform .6s ease;
+  will-change: opacity, transform;
+}
+
+.reveal-left {
+  transform: translateX(-24px)
+}
+
+.reveal-right {
+  transform: translateX(24px)
+}
+
+.reveal-up {
+  transform: translateY(24px)
+}
+
+.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media(max-width:960px) {
+
+  .bi-row,
+  .bi-row--flip {
+    grid-template-columns: 1fr
+  }
+
+  .bi-row--flip .bi-image {
+    order: 1
+  }
+
+  .bi-row--flip .bi-text {
+    order: 2
+  }
+
+  .bi-cards {
+    grid-template-columns: 1fr
+  }
+
+  .bi-image::before {
+    display: none
+  }
+}
+
+/* ===== 9) TESTIMONIALS ===== */
+.testimonials {
+  padding: 4rem 0 4.5rem;
+  background: #f5f6f7;
+}
+
+.testimonials .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.t-grid {
+  display: grid;
+  gap: 2.5rem;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: start;
+}
+
+@media(max-width:960px) {
+  .t-grid {
+    grid-template-columns: 1fr
+  }
+}
+
+.t-left .t-pill {
+  display: inline-block;
+  background: #f3eac2;
+  color: #1e392a;
+  padding: .35rem .65rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: .85rem;
+}
+
+.t-title {
+  margin: .75rem 0 1rem;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  line-height: 1.1;
+  color: #1e392a;
+  font-weight: 800;
+}
+
+.t-title span {
+  color: #2c4e3a;
+}
+
+.t-lead {
+  color: #4b5563;
+  line-height: 1.8;
+  max-width: 48ch;
+}
+
+.t-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.t-stat .t-value {
+  color: #d4a300;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.t-stat .t-label {
+  color: #6b7280;
+}
+
+.t-right {
+  display: grid;
+  gap: 1rem;
+}
+
+.t-card {
+  background: #fff;
+  border: 1px solid #e4ebe7;
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem 1.1rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .06);
+}
+
+.t-stars {
+  display: flex;
+  gap: .25rem;
+  margin-bottom: .5rem;
+  color: #d4a300;
+}
+
+.t-stars .star {
+  width: 20px;
+  height: 20px;
+  fill: #d4a300;
+}
+
+.t-quote {
+  color: #374151;
+  line-height: 1.8;
+  margin: .25rem 0 .9rem;
+  font-style: italic;
+}
+
+.t-author .name {
+  font-weight: 700;
+  color: #1e392a;
+}
+
+.t-author .role {
+  color: #6b7280;
+  font-size: .95rem;
+}
+
+/* ===== 10) FOOTER (4-column, dark) ===== */
+.site-footer {
+  background: #0f1c16;
+  color: #d7e6dd;
+  padding: 3.5rem 0 2.25rem;
+}
+
+.site-footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr 1fr;
+  gap: 2.5rem 2rem;
+  align-items: start;
+}
+
+.footer-title {
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.brand-row {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+
+.brand-icon {
+  width: 28px;
+  height: 28px;
+  color: #8fc2a8;
+}
+
+.footer-blurb {
+  margin: .25rem 0 0;
+  max-width: 32ch;
+  color: #a8b9b1;
+  line-height: 1.7;
+}
+
+.footer-heading {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 0 .75rem;
+}
+
+.footer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: .5rem;
+}
+
+.footer-link {
+  color: #cfe4d9;
+  text-decoration: none;
+  transition: color .2s ease, opacity .2s ease;
+}
+
+.footer-link:hover {
+  color: #fff;
+}
+
+.footer-link[aria-disabled="true"] {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.footer-sep {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  margin: 2.25rem 0 1.25rem;
+}
+
+.footer-copy {
+  text-align: center;
+  color: #a8b9b1;
+  margin: 0;
+  font-size: .95rem;
+}
+
+@media(max-width:980px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem
+  }
+}
+
+@media(max-width:600px) {
+  .footer-grid {
+    grid-template-columns: 1fr
+  }
+
+  .footer-title {
+    font-size: 1.4rem
+  }
+}
+
+/* slide-away header */
+#topNav { 
+  transition: transform .28s ease;
+  will-change: transform;
+  z-index: 1100;              /* ensure above sticky tabs */
+}
+
+/* optional: body flags (used by JS). keeps sticky tabs offset correct */
+body.header-shown  { --sticky-offset: 64px; } /* JS will update exact px */
+body.header-hidden { --sticky-offset: 0px;  }
+
+/* --- HERO FIX --- */
+/* Make the hero as tall as the viewport (minus the sticky header) */
+section.hero-image{
+  height: calc(75vh - var(--sticky-offset));
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+/* Make the video fill that space */
+.hero-image .hero-media,
+.hero-image #heroVideo{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;      /* fills the hero; switch to 'contain' if you never want cropping */
+  object-position: 50% 50%;
+  background: #000;
+}
+
+/* ========== NAV REDESIGN (glass header + pill tabs) ========== */
+
+/* Glassy, compact top header */
+#topNav,
+.top-nav{
+  background: color-mix(in srgb, var(--green) 88%, transparent);
+  backdrop-filter: saturate(1.2) blur(10px);
+  -webkit-backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: .6rem 1rem;
+  box-shadow: 0 6px 30px rgba(0,0,0,.10);
+}
+.branding .logo{ height: 34px; }
+
+#headerMuteBtn{
+  width: 36px; height: 36px; border: 0;
+  display: grid; place-items: center;
+  border-radius: 10px; cursor: pointer;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+#headerMuteBtn:hover{ background:#fff; }
+#headerMuteBtn .icon{ font-size:16px; line-height:1; }
+
+/* keep your existing avatar chip but soften it a bit */
+.nav-icons{
+  gap:10px; padding: 6px 8px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ---- Tabs: pill group with sliding indicator ---- */
+.search-bar{
+  position: sticky;
+  top: var(--sticky-offset);
+  z-index: 999;
+  background: transparent;
+  padding: 12px 16px;
+  margin: 0 0 14px;
+  box-shadow: none;
+  display: flex;
+  justify-content: center;
+}
+
+/* We’ll wrap the buttons at runtime */
+.search-bar .tabs-wrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 9999px;
+  background: rgba(255,255,255,.65);
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* The moving highlight */
+.search-bar .tab-indicator{
+  position: absolute;
+  inset: 6px auto 6px 6px;       /* top/bottom match .tabs-wrap padding */
+  width: 0;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+  transition: transform .25s ease, width .25s ease;
+  will-change: transform, width;
+  pointer-events: none;
+}
+
+/* Individual tab buttons */
+.search-bar button{
+  position: relative;
+  z-index: 1;
+  padding: .6rem 1.05rem;
+  border: 0;
+  background: transparent;
+  border-radius: 9999px;
+  font-weight: 700;
+  color: #1e392a;
+  opacity: .75;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.search-bar button:hover{ opacity: 1; }
+.search-bar button.active{ color: var(--green); opacity: 1; }
+
+/* Mobile: let the pill group scroll if needed */
+@media (max-width: 720px){
+  .search-bar{ overflow-x: auto; }
+  .search-bar .tabs-wrap { min-width: min(560px, 100%); }
+}
+
+/* ===== Modern page switch animation (View Transitions + fallback) ===== */
+
+/* Don't fade the whole page (keep header/nav static) */
+::view-transition-old(root),
+::view-transition-new(root){ animation: none; }
+
+/* Animate only the main content area */
+#main{ view-transition-name: page; }
+
+/* View-Transition animations */
+@keyframes vt-fade-in { from{opacity:0} to{opacity:1} }
+@keyframes vt-fade-out{ from{opacity:1} to{opacity:0} }
+@keyframes vt-slide-in { from{transform:translateY(12px)} to{transform:translateY(0)} }
+@keyframes vt-slide-out{ from{transform:translateY(0)} to{transform:translateY(-12px)} }
+
+::view-transition-old(page){ animation: vt-fade-out .28s ease, vt-slide-out .28s ease; }
+::view-transition-new(page){ animation: vt-fade-in  .32s ease, vt-slide-in  .32s ease; }
+
+/* --- Fallback (browsers without the API) --- */
+html:not(.vt) #main{ transition: opacity .28s ease, transform .28s ease; }
+html:not(.vt) #main.fade-out{ opacity:0; transform:translateY(-10px); }
+
+/* --- TABS BELOW HEADER, VIDEO STARTS AFTER --- */
+.search-bar{
+  /* make it participate in layout instead of floating */
+  position: sticky !important;
+  top: calc(var(--sticky-offset) + 6px) !important;
+  left: auto !important;
+  transform: none !important;
+
+  /* layout & look */
+  display: flex !important;
+  justify-content: center !important;
+  width: 100%;
+  margin: 7px 0 10px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  z-index: 650 !important;   /* under header, above content */
+}
+
+/* keep the pill centered */
+.search-bar .tabs-wrap{ margin: 0 auto; }
+
+/* hero sits right after the tabs */
+.hero-image{ margin-top: 0 !important; }
+
+/* keep only the header mute icon */
+#heroMuteBtn,
+.hero-controls{ display: none !important; }
+
+
+/* ===== Imported missing rules from style.css ===== */
+/* =========================================
+   0) TOKENS / RESET / BASE
+   ========================================= */
+:root {
+  --green: #2f4b2f;
+  --cream: #FBF6F6;
+  --ink: #1b1f23;
+  --gold: #f1c40f;
+
+  --radius: 14px;
+  --shadow-1: 0 2px 6px rgba(0, 0, 0, .10);
+  --shadow-2: 0 8px 28px rgba(0, 0, 0, .12);
+
+  --container: 1320px;
+
+  /* JS updates these when the split panel opens */
+  --sticky-offset: 64px;
+  --filters-h: 0px;
+
+  /* media heights */
+  --hero-h: 520px;
+  --hero-h-max: 52vh;
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+
+.branding {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.branding .logo {
+  height: 40px;
+}
+
+
+/* Nav: hamburger + avatar */
+.nav-icons {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .15);
+}
+
+
+.menu-btn {
+  font-size: 18px;
+  background: transparent;
+  color: #111;
+  border: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+.menu-btn:hover {
+  background: rgba(0, 0, 0, .06);
+}
+
+
+.menu-btn:focus-visible {
+  outline: 2px solid #0b5;
+  outline-offset: 2px;
+}
+
+
+.profile-circle {
+  background: var(--gold);
+  color: #000;
+  font-weight: 700;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+  cursor: pointer;
+  border: 0;
+}
+
+
+.profile-circle,
+.page-profile .avatar-lg { text-transform: uppercase; }
+
+
+.profile-circle:focus-visible { 
+  outline: 2px solid #0b5; 
+  outline-offset: 2px; }
+
+
+/* User popover */
+.menu-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1001;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+  padding: 8px;
+  min-width: 180px;
+}
+
+
+.menu-popover button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  color: #111;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+
+.menu-popover .menu-sep {
+  border: 0;
+  height: 1px;
+  background: #e9ecef;
+  margin: 6px 0;
+}
+
+
+/* =========================================
+   2) HERO
+   ========================================= */
+.hero-image {
+  height: 300px;
+  overflow: hidden;
+}
+
+
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 85%;
+}
+
+
+/* =========================================
+   3) SECTION TAB BAR
+   ========================================= */
+.search-bar {
+  position: sticky;
+  top: var(--sticky-offset);
+  z-index: 999;
+  background: var(--cream);
+  padding: 30px 1rem .75rem;
+  display: flex;
+  gap: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+  margin-bottom: 1rem;
+  transition: transform .3s ease;
+}
+
+
+.search-bar button {
+  padding: .5rem 1rem;
+  background: var(--cream);
+  border: 0;
+  cursor: pointer;
+}
+
+
+.search-bar button.active {
+  background: transparent;
+  border-bottom: 3px solid #204020;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   4) FOOTER
+   ========================================= */
+.footer {
+  background: #204020;
+  color: #FCE3B5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+  padding: 1rem;
+  font-size: .9rem;
+}
+
+
+.footer .contact-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  white-space: nowrap;
+}
+
+
+.footer .contact-info span {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+
+.footer .social-link a {
+  color: #FCE3B5;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+
+.icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+
+/* =========================================
+   5) GENERIC PAGE SECTIONS
+   ========================================= */
+.content-section {
+  padding: 3rem 1rem 2rem;
+  background: #fff;
+  flex: 1;
+}
+
+
+.content-section h2 {
+  margin-bottom: 1rem;
+  color: var(--green);
+}
+
+
+.content-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+
+.content-section li {
+  background: #f4f4f4;
+  margin-bottom: .75rem;
+  padding: 1rem;
+  border-left: 6px solid var(--green);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+}
+
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+
+/* =========================================
+   6) ROOMS — FILTERS
+   ========================================= */
+.room-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0 .5rem;
+}
+
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-shrink: 0;
+}
+
+
+/* Toggle */
+.filters-and-rooms {
+  --switch-label-w: 16ch;
+}
+
+
+.switch-container {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  cursor: pointer;
+  user-select: none;
+  min-width: calc(40px + 8px + var(--switch-label-w));
+}
+
+
+.switch-container input {
+  display: none;
+}
+
+
+.slider {
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 20px;
+  position: relative;
+  transition: background-color .3s ease;
+}
+
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 2px;
+  left: 2px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .3s ease;
+}
+
+
+.switch-container input:checked+.slider {
+  background: #4CAF50;
+}
+
+
+.switch-container input:checked+.slider::before {
+  transform: translateX(20px);
+}
+
+
+.switch-container .label-text {
+  display: inline-block;
+  width: var(--switch-label-w);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  color: #333;
+  pointer-events: none;
+}
+
+
+/* =========================================
+   7) ROOMS — GRID + CARDS
+   ========================================= */
+.room-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+
+.room-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s ease;
+  cursor: pointer;
+}
+
+
+.room-card:hover {
+  transform: translateY(-4px);
+}
+
+
+.room-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+
+.room-card-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+
+.room-card-content h4 {
+  font-size: 1rem;
+  margin-bottom: .25rem;
+  color: var(--green);
+}
+
+
+.room-card-content p {
+  margin: 0;
+  font-size: .9rem;
+  color: #444;
+}
+
+
+.room-card-content .highlight {
+  font-weight: 700;
+}
+
+
+.status {
+  display: inline-block;
+  padding: .25rem .5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: .85rem;
+}
+
+
+.status.available {
+  background: #c8e6c9;
+  color: #256029;
+}
+
+
+.status.occupied {
+  background: #ffcdd2;
+  color: #b71c1c;
+}
+
+
+.room-card.is-active {
+  outline: 3px solid #cfe8d0;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+
+/* =========================================
+   8) DETAILS PANEL + SPLIT VIEW
+   ========================================= */
+.room-panel {
+  display: none;
+  margin-top: 16px;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+  transform-origin: var(--grow-x, 50%) var(--grow-y, 0%);
+}
+
+
+.room-panel.is-open {
+  display: block;
+  animation: growIn .28s ease;
+  position: sticky;
+  top: var(--sticky-offset);
+}
+
+
+@keyframes growIn {
+  from {
+    transform: scale(.98);
+    opacity: 0;
+  }
+
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+}
+
+.room-panel__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--green);
+  color: #fff;
+}
+
+
+.room-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+
+.room-close {
+  font-size: 28px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+.room-close:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+
+.room-panel__content {
+  display: grid;
+  gap: 20px;
+  padding: 18px;
+  grid-template-columns: 320px 1fr 120px;
+  /* wider info column to match mock */
+  align-items: start;
+}
+
+
+/* Left column (card placeholder; actual styling in section 10) */
+.room-info {
+  align-self: start;
+  position: sticky;
+  top: var(--sticky-offset);
+}
+
+
+/* Center media */
+.room-hero {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+
+.hero-img {
+  width: 100%;
+  height: var(--hero-h);
+  max-height: var(--hero-h-max);
+  object-fit: cover;
+  border-radius: 14px;
+  background: #ddd;
+}
+
+
+/* Right thumbnails */
+.thumbs {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  align-self: start;
+  max-height: var(--hero-h-max);
+  overflow: auto;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+
+.thumbs::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+.thumbs::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, .2);
+  border-radius: 8px;
+}
+
+
+.thumbs .thumb {
+  position: relative;
+  padding: 0;
+  border: 2px solid transparent;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+.thumbs .thumb.is-active {
+  border-color: var(--green);
+}
+
+
+.thumbs .thumb:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+
+.thumbs img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+
+/* 360 viewer */
+.pano-viewer {
+  width: 100%;
+  height: var(--hero-h);
+  max-height: var(--hero-h-max);
+  border-radius: 14px;
+  display: none;
+  background: #ddd;
+  overflow: hidden;
+}
+
+
+.pano-viewer.is-on {
+  display: block;
+}
+
+
+.tag-360 {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--green);
+  color: #fff;
+  pointer-events: none;
+}
+
+
+/* Split layout scaffolding */
+.filters-and-rooms.is-split {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) minmax(700px, 1fr);
+  grid-template-areas:
+    "filters panel"
+    "list    panel";
+  gap: 12px 20px;
+  align-items: start;
+  align-content: start;
+}
+
+
+/* Left: filters (sticky) */
+.filters-and-rooms.is-split .room-filters {
+  grid-area: filters;
+  position: sticky;
+  top: var(--sticky-offset);
+  z-index: 1;
+  padding-right: 6px;
+  /* room for list scrollbar below */
+}
+
+
+/* Left: list (own scrollbar; height set via JS to match panel) */
+.filters-and-rooms.is-split .room-list {
+  grid-area: list;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 6px;
+  scrollbar-gutter: stable;
+}
+
+
+.filters-and-rooms.is-split .room-list>.room-card {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+
+/* Right: sticky details panel */
+.filters-and-rooms.is-split .room-panel {
+  grid-area: panel;
+  margin-top: 0;
+  position: sticky;
+  top: var(--sticky-offset);
+  overflow: auto;
+}
+
+
+/* Hide the tabs row only while panel is open */
+body.details-open .search-bar {
+  display: none !important;
+}
+
+
+/* Tight container for Rooms section only */
+#rooms .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+/* =========================================
+   9) AUTH + INQUIRE DIALOGS
+   ========================================= */
+dialog.login-dialog,
+dialog.register-dialog,
+dialog.inquire-dialog {
+  border: 0;
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  /* centered */
+}
+
+
+dialog.login-dialog::backdrop,
+dialog.register-dialog::backdrop,
+dialog.inquire-dialog::backdrop {
+  background: rgba(0, 0, 0, .35);
+}
+
+
+/* Safari fallback if `inset` isn’t supported */
+@supports not (inset: 0) {
+
+  dialog.login-dialog,
+  dialog.register-dialog,
+  dialog.inquire-dialog {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+}
+
+.login-dialog h3,
+.register-dialog h3 {
+  margin: 6px 0 18px;
+  text-align: center;
+  color: var(--green);
+  font-size: 20px;
+  font-weight: 800;
+}
+
+
+.dialog-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+
+.dialog-close:hover {
+  background: rgba(0, 0, 0, .06);
+}
+
+
+.auth-form {
+  display: grid;
+  gap: 14px;
+}
+
+
+.input-wrap input {
+  width: 100%;
+  height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .02) inset;
+}
+
+
+.input-wrap input:focus {
+  border-color: #c1d5c1;
+  box-shadow: 0 0 0 3px rgba(47, 75, 47, .12);
+}
+
+
+.btn.primary.block {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  background: var(--green);
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+}
+
+
+.register-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+
+.register-row .line {
+  flex: 1 1 auto;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+
+.register-row .link,
+.switch-auth .link {
+  background: transparent;
+  border: 0;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0 2px;
+  border-radius: 6px;
+}
+
+
+.register-row .link:hover,
+.switch-auth .link:hover {
+  background: rgba(0, 0, 0, .04);
+}
+
+
+.input-with-action {
+  position: relative;
+}
+
+
+.inline-action {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: #5b5bd6;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
+
+
+.inline-action:disabled {
+  color: #9ca3af;
+  cursor: default;
+}
+
+
+.switch-auth {
+  text-align: center;
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* Inquire form specifics */
+.inquire-dialog h3 {
+  margin: 6px 0 18px;
+  text-align: center;
+  color: var(--green);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+
+.inq-form {
+  display: grid;
+  gap: 14px;
+}
+
+
+.inq-form .input-wrap input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  font-size: 14px;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .02) inset;
+  outline: none;
+}
+
+
+.inq-form .input-wrap input:focus {
+  border-color: #c1d5c1;
+  box-shadow: 0 0 0 3px rgba(47, 75, 47, .12);
+}
+
+
+.inq-form .with-icon {
+  position: relative;
+}
+
+
+.inq-form .calendar-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+
+/* === Login button loading & responsiveness === */
+.btn { position: relative; }
+
+
+.btn.primary.block {
+  width: 100%;
+  min-height: 44px;                 /* touch-friendly */
+  font-size: clamp(14px, 0.9rem + 0.2vw, 16px); /* responsive text */
+}
+
+
+.btn:disabled { cursor: not-allowed; opacity: .7; }
+
+
+.btn.loading { pointer-events: none; opacity: .9; }
+
+
+/* subtle spinner on the right side of the button text */
+@keyframes cz-spin { to { transform: rotate(360deg); }
+ }
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 16px; height: 16px;
+  margin-top: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.55);
+  border-top-color: #fff;
+  animation: cz-spin .9s linear infinite;
+}
+
+
+
+/* =========================================
+   10) UNIT DETAILS CARD (mock styling)
+   ========================================= */
+.room-info {
+  background: #fff;
+  border: 1px solid #e8ece8;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .10);
+  padding: 16px 18px 18px;
+}
+
+
+.room-info h2,
+.room-info h3,
+.room-info h4 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 4px 0 12px;
+  color: #243026;
+}
+
+
+/* Title sizing */
+.room-info .unit-title {
+  font-weight: 700;
+  font-size: clamp(1.05rem, 0.9rem + 0.4vw, 1.25rem);
+  line-height: 1.2;
+  margin: 4px 0 12px;
+  color: #243026;
+}
+
+
+/* Header row (title + pill) */
+.room-info .card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 0 12px;
+}
+
+
+.room-info .card-head .unit-title {
+  margin: 0;
+}
+
+
+.room-info .type-pill {
+  position: static;
+  background: #e7f0ea;
+  color: var(--green);
+  font-weight: 700;
+  font-size: .85rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  line-height: 1;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .04) inset;
+}
+
+
+/* Divider under header */
+.kv {
+  border-top: 1px solid #e8ece8;
+  padding-top: 12px;
+  margin-top: 6px;
+}
+
+
+.kv>div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: baseline;
+}
+
+
+.kv dt {
+  font-weight: 700;
+  color: #1d2a21;
+}
+
+
+.kv dd {
+  margin: 0;
+  color: #0e140f;
+  text-align: right;
+}
+
+
+.kv .muted {
+  color: #6b7280;
+  margin-right: 6px;
+}
+
+
+.kv .price {
+  font-weight: 700;
+  letter-spacing: .2px;
+  margin-left: 6px;
+}
+
+
+/* Occupancy bar */
+.kv .occ-bar {
+  height: 8px;
+  background: #cccfce;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+
+.kv .occ-bar>span {
+  display: block;
+  height: 100%;
+  background: var(--green);
+}
+
+
+/* Sections */
+.room-info .field-title {
+  display: block;
+  margin: 12px 0 4px;
+  font-size: 1.05rem;
+  color: #1d2a21;
+}
+
+
+.room-info .field-body {
+  color: #1a1f1c;
+}
+
+
+.room-info .field-body .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+
+/* CTA */
+.cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+
+.btn-inquire {
+  background: var(--green);
+  color: #fff;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+
+.btn-inquire.is-full {
+  background: #dc2626;
+  color: #fff;
+}
+
+
 .btn-inquire.is-full[disabled] {
   opacity: 1;
   cursor: not-allowed;
 }
 
+
 /* Red occupancy bar when full (optional) */
 .kv .occ-bar.is-full>span {
   background: #dc2626;
 }
+
 
 /* =========================================
    11) ACCESSIBILITY / MOTION
@@ -1033,9 +2520,11 @@ dialog.inquire-dialog::backdrop {
     transition: none;
   }
 
+
   .room-panel.is-open {
     animation: none;
   }
+
 }
 
 /* =========================================
@@ -1047,6 +2536,7 @@ dialog.inquire-dialog::backdrop {
   --danger: #dc2626; /* error red */
 }
 
+
 /* Error message block inserted by JS */
 .input-wrap .field-error {
   margin-top: 6px;
@@ -1054,6 +2544,7 @@ dialog.inquire-dialog::backdrop {
   line-height: 1.35;
   color: var(--danger);
 }
+
 
 /* Red outline when JS flags a field as invalid */
 .input-wrap.invalid input,
@@ -1064,11 +2555,13 @@ select[aria-invalid="true"] {
   box-shadow: 0 0 0 3px rgba(220, 38, 38, .16);
 }
 
+
 /* Optional: subtle placeholder tint on invalid */
 input[aria-invalid="true"]::placeholder {
   color: var(--danger);
   opacity: .9;
 }
+
 
 /* =========================================
    12b) LAYOUT & FOOTER PATCH (non-breaking overrides)
@@ -1082,16 +2575,19 @@ input[aria-invalid="true"]::placeholder {
   display: block;
 }
 
+
 /* Footer: allow wrapping instead of forcing one line */
 .footer .contact-info {
   flex-wrap: wrap;
   white-space: normal;
 }
 
+
 .footer .social-link a {
   white-space: normal;
   overflow-wrap: anywhere;
 }
+
 
 /* Stack neatly on narrow screens */
 @media (max-width: 560px) {
@@ -1100,16 +2596,20 @@ input[aria-invalid="true"]::placeholder {
     align-items: flex-start;
     gap: .5rem;
   }
+
 }
 
-.auth-form { --field-h: 44px; } /* matches .auth-form input height */
+.auth-form { --field-h: 44px; }
+ /* matches .auth-form input height */
 
 .auth-form .input-with-action { position: relative; }
+
 
 /* Make room for the inline button inside the input */
 .auth-form .input-with-action input {
   padding-right: 84px; /* space for "Send" / countdown */
 }
+
 
 /* Center the button relative to the input's height, unaffected by error text */
 .auth-form .input-with-action .inline-action {
@@ -1118,3 +2618,122 @@ input[aria-invalid="true"]::placeholder {
   min-width: 56px;
   text-align: right;
 }
+
+
+/* ===== Profile page ===== */
+.page-profile .container {
+  max-width: 980px;
+  margin: 96px auto 24px;      /* clears fixed header */
+  padding: 0 24px;
+}
+
+
+.page-profile h1 {
+  margin: 0 0 16px;
+  font-size: 28px;
+}
+
+
+.page-profile .profile-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  padding: 24px;
+}
+
+
+.page-profile .acct-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+
+.page-profile .avatar-lg {
+  width: 120px; height: 120px;
+  border-radius: 16px;
+  display: grid; place-items: center;
+  font-size: 56px; font-weight: 600;
+  background: #d4b400; color: #fff;
+}
+
+
+.page-profile .acct-cols h3 {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+
+.page-profile .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+
+.page-profile small {
+  display: block;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+
+/* mobile tweaks */
+@media (max-width: 640px) {
+  .page-profile .acct-row { grid-template-columns: 80px 1fr; }
+
+  .page-profile .avatar-lg { width: 80px; height: 80px; font-size: 36px; }
+
+  .page-profile .grid-2 { grid-template-columns: 1fr; }
+
+}
+
+/* ===== App extras ===== */
+
+/* ===== Dialogs (auth/register/inquire) ===== */
+dialog.login-dialog, dialog.register-dialog, dialog.inquire-dialog {
+  width: min(480px, 92vw);
+  border: 0; border-radius: 16px; padding: 20px; box-shadow: var(--shadow-2);
+}
+dialog::backdrop { background: rgba(0,0,0,.35); }
+
+.dialog-close {
+  position: absolute; right: 10px; top: 8px; font-size: 22px; background: transparent; border: 0; cursor: pointer;
+}
+.input-wrap { position: relative; margin: 10px 0; }
+.input-wrap input { width: 100%; padding: 12px 12px; border-radius: 10px; border: 1px solid #dadfe3; }
+.input-wrap.with-icon input { padding-right: 40px; }
+.input-wrap .inline-action { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 0; background: var(--green); color: #fff; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+
+/* Field errors */
+.input-wrap.invalid input { border-color: #dc2626; }
+.field-error { margin-top: 6px; color: #dc2626; font-size: 13px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 700; cursor: pointer; }
+.btn.primary { background: var(--green); color: #fff; }
+.btn.primary.block { width: 100%; }
+
+/* Register row */
+.register-row { display:flex; align-items:center; gap:10px; margin-top:10px; }
+.register-row .line { flex:1; height:1px; background:#e6e6e6; }
+
+/* Link button style */
+button.link { background: transparent; color: var(--green); border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+
+/* Hero mute button */
+.mute-btn { background:#fff; border:0; border-radius: 999px; padding: 6px 10px; box-shadow: var(--shadow-1); cursor:pointer; }
+.mute-btn .icon { display:none; }
+.mute-btn[aria-pressed="true"] .muted { display:inline; }
+.mute-btn[aria-pressed="false"] .unmuted { display:inline; }
+
+.hero-controls { position:absolute; top:10px; right:10px; z-index:2; }
+
+/* Tabs wrapper (script.js creates it) */
+.tabs-wrap { position: relative; display:flex; gap:1rem; align-items:center; }
+.tab-indicator { position:absolute; bottom:-3px; height:3px; background: #204020; border-radius:2px; width: 96px; transition: left .25s ease, width .25s ease; }
+
+/* Site footer (toggle on Home only) */
+.site-footer { background: #204020; color: #FCE3B5; padding: 1rem; text-align:center; }
