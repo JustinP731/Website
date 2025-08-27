@@ -5,20 +5,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cazza Zamora Residences</title>
-
-  <!-- Pannellum (kept for your room 360) -->
   <link rel="stylesheet" href="https://unpkg.com/pannellum/build/pannellum.css">
-  <!-- Site CSS -->
   <link rel="stylesheet" href="css/style.css">
-
   <style>
-    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px;}
-    .menu-sep{border:0;border-top:1px solid #eee;margin:.25rem 0;}
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px);
+      white-space: nowrap;
+      border: 0;
+      padding: 0;
+      margin: -1px;
+    }
+
+    .menu-sep {
+      border: 0;
+      border-top: 1px solid #eee;
+      margin: .25rem 0;
+    }
   </style>
 </head>
 
 <body id="top">
-  <!-- ========= Top Nav ========= -->
   <header id="topNav" class="top-nav">
     <div class="branding">
       <a href="#" id="logoBtn" aria-label="Go to Home">
@@ -26,35 +36,33 @@
       </a>
     </div>
 
-    <!-- Header mute toggle -->
     <button id="headerMuteBtn" class="menu-btn" type="button" aria-label="Toggle video sound" aria-pressed="true"
       title="Toggle sound">
-      <!-- shows 🔇 when muted, 🔊 when unmuted via aria-pressed -->
       <span class="icon muted" aria-hidden="true">🔇</span>
       <span class="icon unmuted" aria-hidden="true">🔊</span>
     </button>
-
 
     <div class="nav-icons">
       <button id="menuBtn" class="menu-btn" type="button" aria-haspopup="menu" aria-expanded="false"
         aria-controls="userMenu">☰</button>
 
-      <div aria-labelledby="menuBtn" class="menu-popover" hidden="" id="userMenu" role="menu">
-        <button hidden="" id="menuProfile" role="menuitem" type="button">My profile</button>
+      <div aria-labelledby="menuBtn" class="menu-popover" hidden id="userMenu" role="menu">
+        <button hidden id="menuProfile" role="menuitem" type="button">My profile</button>
         <button id="menuLogin" role="menuitem" type="button">Log in</button>
         <button id="menuRegister" role="menuitem" type="button">Register</button>
         <button id="menuLogout" role="menuitem" type="button">Log out</button>
       </div>
 
-      <button aria-label="User: Guest" class="profile-circle" id="userStatus" title="Guest" type="button">G</button>
-      <!-- Inquire -->
+      <button id="userStatus" class="profile-circle" type="button" title="Guest" aria-label="User: Guest">G</button>
+
       <dialog aria-labelledby="inqTitle" aria-modal="true" class="inquire-dialog" id="inquireDialog">
         <button aria-label="Close" class="dialog-close" form="none" type="button">×</button>
         <h3 id="inqTitle">Request To Rent</h3>
-        <form class="inq-form" id="inquireForm" method="dialog" novalidate="">
+
+        <form class="inq-form" id="inquireForm" method="dialog" novalidate>
           <div class="input-wrap" data-err="Please enter your contact number.">
             <label class="visually-hidden" for="inqPhone">Contact Number</label>
-            <input id="inqPhone" name="phone" placeholder="Contact Number" required="" type="tel" />
+            <input id="inqPhone" name="phone" placeholder="Contact Number" required type="tel" />
           </div>
           <div class="input-wrap" data-err="Enter a valid email address.">
             <label class="visually-hidden" for="inqEmail">Email</label>
@@ -62,30 +70,29 @@
           </div>
           <div class="input-wrap" data-err="Name is required.">
             <label class="visually-hidden" for="inqName">Name</label>
-            <input id="inqName" name="name" placeholder="Name" required="" type="text" />
+            <input id="inqName" name="name" placeholder="Name" required type="text" />
           </div>
           <div class="input-wrap with-icon" data-err="Pick a date.">
             <label class="visually-hidden" for="inqDate">Preferred Date</label>
-            <input id="inqDate" name="date" required="" type="date" />
+            <input id="inqDate" name="date" required type="date" />
           </div>
           <input id="inqRoomId" name="roomId" type="hidden" />
           <button class="btn primary block" id="inqSubmit" type="submit">Request</button>
         </form>
       </dialog>
 
-      <!-- Login -->
       <dialog aria-labelledby="authTitle" aria-modal="true" class="login-dialog" id="authDialog">
         <button aria-label="Close" class="dialog-close" type="button">×</button>
         <h3 id="authTitle">Account Log In</h3>
-        <form class="auth-form" id="authForm" method="dialog" novalidate="">
-          <div class="input-wrap" data-err="Enter a valid phone number.">
+        <form class="auth-form" id="authForm" method="dialog" novalidate>
+          <div class="input-wrap" data-err="Enter a valid phone number">
             <label class="visually-hidden" for="authPhone">Phone</label>
-            <input autocomplete="tel" id="authPhone" inputmode="tel" name="phone" pattern="\+?[0-9\s\-()]{7,}"
-              placeholder="Phone number" required="" type="tel" />
+            <input autocomplete="tel" id="authPhone" inputmode="tel" name="phone" pattern="^(\+?63|0)9\d{9}$"
+              placeholder="Phone number" required type="tel" />
           </div>
           <div class="input-wrap" data-err="Password is required.">
             <label class="visually-hidden" for="authPass">Password</label>
-            <input autocomplete="current-password" id="authPass" name="password" placeholder="Password" required=""
+            <input autocomplete="current-password" id="authPass" name="password" placeholder="Password" required
               type="password" />
           </div>
           <button class="btn primary block" id="authSubmit" type="submit">Log In</button>
@@ -96,36 +103,35 @@
           </div>
         </form>
       </dialog>
-      <!-- Register -->
+
       <dialog aria-labelledby="regTitle" aria-modal="true" class="register-dialog" id="registerDialog">
         <button aria-label="Close" class="dialog-close" type="button">×</button>
         <h3 id="regTitle">Account Register</h3>
-        <form class="auth-form" id="regForm" method="dialog" novalidate="">
+        <form class="auth-form" id="regForm" method="dialog" novalidate>
           <div class="input-wrap" data-err="Please enter your name.">
             <label class="visually-hidden" for="regName">Name</label>
-            <input id="regName" placeholder="Name" required="" type="text" />
+            <input id="regName" placeholder="Name" required type="text" />
           </div>
           <div class="input-wrap" data-err="Enter a valid phone number.">
             <label class="visually-hidden" for="regPhone">Phone</label>
-            <input autocomplete="tel" id="regPhone" inputmode="tel" name="phone" pattern="\+?[0-9\s\-()]{7,}"
-              placeholder="Phone number" required="" type="tel" />
+            <input autocomplete="tel" id="regPhone" inputmode="tel" name="phone" pattern="^\+?\d{7,}$"
+              placeholder="Phone number" required type="tel" />
           </div>
           <div class="input-wrap input-with-action" data-err="Enter the code we sent.">
             <label class="visually-hidden" for="regCode">Verification Code</label>
-            <input id="regCode" inputmode="numeric" name="code" placeholder="Verification Code" required=""
-              type="text" />
+            <input id="regCode" inputmode="numeric" name="code" placeholder="Verification Code" required type="text" />
             <button aria-controls="regCode" aria-label="Send verification code to phone" class="inline-action"
               id="regSend" type="button">Send</button>
           </div>
           <div class="input-wrap" data-err="Create a password.">
             <label class="visually-hidden" for="regPass">Password</label>
-            <input autocomplete="new-password" id="regPass" name="password" placeholder="Enter password" required=""
+            <input autocomplete="new-password" id="regPass" name="password" placeholder="Enter password" required
               type="password" />
           </div>
           <div class="input-wrap" data-err="Re-enter your password.">
             <label class="visually-hidden" for="regPass2">Re-enter password</label>
             <input autocomplete="new-password" id="regPass2" name="password_confirm" placeholder="Re-Enter password"
-              required="" type="password" />
+              required type="password" />
           </div>
           <button class="btn primary block" id="regSubmit" type="submit">Register</button>
           <p class="switch-auth">
@@ -137,24 +143,18 @@
     </div>
   </header>
 
-  <!-- ========= Tabs ========= -->
   <nav id="searchBar" class="search-bar" aria-label="Primary">
     <button id="homeBtn" class="active" type="button">Home</button>
     <button id="roomBtn" type="button">Room Available</button>
     <button id="faqsBtn" type="button">FAQs</button>
   </nav>
 
-  <!-- ========= MAIN ========= -->
   <main id="main">
-
-    <!-- Hero (keep your original image) -->
     <section class="hero-image" id="hero" aria-label="Hero">
       <video id="heroVideo" class="hero-media" autoplay muted loop playsinline preload="auto"
         controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture>
         <source src="pngs/cazzaVideose.mp4" type="video/mp4" />
       </video>
-
-      <!-- Overlay controls (top-right) -->
       <div class="hero-controls">
         <button id="heroMuteBtn" class="mute-btn" type="button" aria-label="Unmute video" aria-pressed="true"
           title="Toggle sound">
@@ -164,7 +164,6 @@
       </div>
     </section>
 
-    <!-- Home intro -->
     <section id="home" class="content-section" aria-labelledby="homeTitle">
       <div class="container">
         <h2 id="homeTitle">Welcome to Cazza Zamora Residences</h2>
@@ -173,12 +172,10 @@
       </div>
     </section>
 
-    <!-- Building Information (Home-only) -->
     <section id="building-info" class="content-section building-info" aria-labelledby="buildingInfoTitle">
       <div class="container">
         <h2 id="buildingInfoTitle" class="bi-heading">About the Building</h2>
 
-        <!-- Row 1 -->
         <div class="bi-row">
           <div class="bi-text reveal-left">
             <h3>Modern Living Spaces</h3>
@@ -190,7 +187,6 @@
           </div>
         </div>
 
-        <!-- Row 2 -->
         <div class="bi-row bi-row--flip">
           <div class="bi-image reveal-left">
             <img src="pngs/moreP.jpg" alt="Shared community space">
@@ -202,7 +198,6 @@
           </div>
         </div>
 
-        <!-- Perk cards -->
         <div class="bi-cards">
           <article class="bi-card reveal-up">
             <h4>24/7 Security</h4>
@@ -218,7 +213,6 @@
           </article>
         </div>
 
-        <!-- CTA -->
         <div class="bi-cta reveal-up">
           <a href="#rooms" class="btn-brand">Explore Rooms</a>
           <a href="#faqs" class="btn-ghost">View FAQs</a>
@@ -226,7 +220,6 @@
       </div>
     </section>
 
-    <!-- Testimonials (Home-only) -->
     <section id="testimonials" class="content-section testimonials" aria-labelledby="testimonialsTitle">
       <div class="container">
         <div class="t-grid">
@@ -331,10 +324,6 @@
       </div>
     </section>
 
-
-
-
-    <!-- Rooms -->
     <section id="rooms" class="content-section" aria-labelledby="roomsTitle">
       <div class="container">
         <h2 id="roomsTitle">Listings</h2>
@@ -389,10 +378,6 @@
       </div>
     </section>
 
-
-
-
-    <!-- FAQs -->
     <section id="faqs" class="content-section" style="display:none;" aria-labelledby="faqsTitle">
       <div class="container">
         <h2 id="faqsTitle">FAQs</h2>
@@ -401,7 +386,6 @@
     </section>
   </main>
 
-  <!-- ========= Footer ========= -->
   <footer class="site-footer" aria-label="Footer">
     <div class="container">
       <div class="footer-grid">
@@ -452,11 +436,23 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>const SUPABASE_URL = "https://wsmazwvwxxxuzakvmtha.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzbWF6d3Z3eHh4dXpha3ZtdGhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3Njg4MjcsImV4cCI6MjA3MTM0NDgyN30.hBq1VG0NspgkIrhWnqVpRKhHbzo_I-ZlJ_eknVD5kdk";
-    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    window.__SUPABASE_URL = "https://wsmazwvwxxxuzakvmtha.supabase.co";
+    window.__SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzbWF6d3Z3eHh4dXpha3ZtdGhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3Njg4MjcsImV4cCI6MjA3MTM0NDgyN30.hBq1VG0NspgkIrhWnqVpRKhHbzo_I-ZlJ_eknVD5kdk";
+
+    window.__supabase = window.supabase.createClient(
+      window.__SUPABASE_URL,
+      window.__SUPABASE_ANON_KEY,
+      {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          flowType: "pkce"
+        }
+      }
+    );
   </script>
   <script src="https://unpkg.com/pannellum/build/pannellum.js"></script>
   <script src="js/script.js"></script>
