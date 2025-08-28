@@ -56,19 +56,12 @@ img {
 /* =========================================
    1) TOP NAV (supports #topNav and .top-nav)
    ========================================= */
-#topNav,
-.top-nav {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 1000;
-  background: var(--green);
-  color: var(--cream);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+#topNav, .top-nav{ 
+  background: var(--green) !important; 
+  backdrop-filter: none; 
+  -webkit-backdrop-filter: none; 
 }
+
 
 .branding {
   display: flex;
@@ -2583,4 +2576,70 @@ html:not(.vt) #main.fade-out{ opacity:0; transform:translateY(-10px); }
 #heroMuteBtn,
 .hero-controls{ display: none !important; }
 
-/* why dupes? fuck you imma fix this shit later */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-GREAT WALL=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-GREAT WALL=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-GREAT WALL=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-GREAT WALL=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-GREAT WALL=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+
+/* KV grid (unchanged behavior) */
+#roomPanel .kv .kv-row{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 14px;
+  align-items: start;       /* bar aligns with “Occupancy” label */
+  margin: 0;                /* reset */
+}
+
+/* default small gap between any KV rows */
+#roomPanel .kv .kv-row + .kv-row{
+  margin-top: 8px;
+}
+
+/* bigger gap ONLY between Price and Occupancy */
+#roomPanel .kv .kv-occ-row{
+  margin-top: 20px;         /* match “Male Unit” → “Advance details” spacing */
+}
+
+/* Occupancy cell: bar on top, numbers bottom-right */
+#roomPanel .kv .kv-occ{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#roomPanel .kv .kv-occ .occ-numbers{
+  align-self: flex-end;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  opacity: .9;
+}
+
+/* Bar visuals */
+#roomPanel .kv .occ-bar{
+  height: 8px;
+  border-radius: 999px;
+  background: #e6e8ea;
+  overflow: hidden;
+}
+#roomPanel .kv .occ-bar > span{
+  display: block;
+  height: 100%;
+  background: #2f5b3b;
+}
+
+
+/* Nudge the Rooms section down a little ONLY while split panel is open */
+body.details-open #rooms{
+  padding-top: 90px;                 /* tweak to 12–24px if you want */
+}
+
+/* (optional) add a tiny gap above the split grid itself */
+body.details-open .filters-and-rooms{
+  margin-top: 8px;                   /* small visual breathing room */
+}
+
+/* keep the fixed header OUT of any view-transition (prevents blink) */
+.vt #topNav { view-transition-name: none; }
+
+/* micro stability for some browsers */
+#topNav { backface-visibility: hidden; transform: translateZ(0); }
