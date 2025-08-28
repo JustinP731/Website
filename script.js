@@ -183,7 +183,6 @@ const closeBtn = panel?.querySelector(".room-close");
      SECTION C — STATE + CONSTANTS
      ======================================================================== */
   const body = document.body;
-  const SUPPORTS_VIEW_TRANSITIONS = typeof document.startViewTransition === "function";
 
   // Page flags
   const IS_PROFILE_PAGE = document.body.classList.contains("page-profile");
@@ -1095,24 +1094,25 @@ const closeBtn = panel?.querySelector(".room-close");
 
     // KV grid (price + occupancy with bar)
     kv.innerHTML = `
-      <div class="kv-row">
-        <dt>Price</dt>
-        <dd>
-          <span class="muted">Monthly</span>
-          <span class="price">₱${room.price.toLocaleString()}</span>
-        </dd>
+  <div class="kv-row kv-price">
+    <dt>Price</dt>
+    <dd>
+      <span class="muted">Monthly</span>
+      <span class="price">₱${room.price.toLocaleString()}</span>
+    </dd>
+  </div>
+  <div class="kv-row kv-occ-row">
+    <dt>Occupancy</dt>
+    <dd class="kv-occ">
+      <div class="occ-bar" role="progressbar"
+           aria-valuemin="0" aria-valuemax="${cap}" aria-valuenow="${occ}">
+        <span style="width:${occPct}%"></span>
       </div>
-      <div class="kv-row">
-        <dt>Occupancy</dt>
-        <dd>
-          ${occ} / ${cap}
-          <div class="occ-bar" role="progressbar"
-               aria-valuemin="0" aria-valuemax="${cap}" aria-valuenow="${occ}">
-            <span style="width:${occPct}%"></span>
-          </div>
-        </dd>
-      </div>
-    `;
+      <span class="occ-numbers">${occ} / ${cap}</span>
+    </dd>
+  </div>
+`;
+
 
     // In-card sections
     descEl.innerHTML = `
@@ -1283,12 +1283,7 @@ const closeBtn = panel?.querySelector(".room-close");
         advance: card.dataset.advance,
         images: (card.dataset.images || "").split(",").filter(Boolean)
       };
-
-      if (SUPPORTS_VIEW_TRANSITIONS) {
-        document.startViewTransition(() => openPanel(room, card));
-      } else {
         openPanel(room, card);
-      }
     });
 
     roomListEl.addEventListener("keydown", (e) => {
@@ -1709,10 +1704,3 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 //const scrollToTabs = () => { }; // no-op; tabs are fixed over the hero now
-
-/*Need to do list:
-   Connect Register to Supabase
-   Fix auto validation
-   Profile.html
-   Create Inquire html? idk here what to do yet
-   */
