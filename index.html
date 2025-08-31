@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cazza Zamora Residences</title>
-  <link rel="website icon" type="png" href="pngs/IconWeb.png"/>
+  <link rel="website icon" type="png" href="pngs/IconWeb.png" />
   <link rel="stylesheet" href="https://unpkg.com/pannellum/build/pannellum.css">
   <link rel="stylesheet" href="css/style.css">
   <style>
@@ -86,10 +86,10 @@
         <button aria-label="Close" class="dialog-close" type="button">×</button>
         <h3 id="authTitle">Account Log In</h3>
         <form class="auth-form" id="authForm" method="dialog" novalidate>
-          <div class="input-wrap" data-err="Enter a valid phone number">
-            <label class="visually-hidden" for="authPhone">Phone</label>
-            <input autocomplete="tel" id="authPhone" inputmode="tel" name="phone" pattern="^(\+?63|0)9\d{9}$"
-              placeholder="Phone number" required type="tel" />
+          <div class="input-wrap" data-err="Enter a valid phone number or email">
+            <label class="visually-hidden" for="authPhone">Phone or Email</label>
+            <input autocomplete="tel" id="authPhone" inputmode="tel" name="phone" placeholder="Phone number or Email"
+              required type="text" />
           </div>
           <div class="input-wrap" data-err="Password is required.">
             <label class="visually-hidden" for="authPass">Password</label>
@@ -437,24 +437,15 @@
     </div>
   </footer>
 
+  <!-- Supabase UMD CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <script>
-    window.__SUPABASE_URL = "https://wsmazwvwxxxuzakvmtha.supabase.co";
-    window.__SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzbWF6d3Z3eHh4dXpha3ZtdGhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3Njg4MjcsImV4cCI6MjA3MTM0NDgyN30.hBq1VG0NspgkIrhWnqVpRKhHbzo_I-ZlJ_eknVD5kdk";
 
-    window.__supabase = window.supabase.createClient(
-      window.__SUPABASE_URL,
-      window.__SUPABASE_ANON_KEY,
-      {
-        auth: {
-          autoRefreshToken: true,
-          persistSession: true,
-          detectSessionInUrl: true,
-          flowType: "pkce"
-        }
-      }
-    );
-  </script>
+  <!-- Centralized helper -->
+  <script src="js/auth.js"></script>
+
+  <!-- One-liner: if logged-in user is admin/staff, redirect to admin panel -->
+  <script>auth.installFrontPageRedirects({ adminPath: "administration.html" });</script>
+
   <script src="https://unpkg.com/pannellum/build/pannellum.js"></script>
   <script src="js/script.js"></script>
 </body>
