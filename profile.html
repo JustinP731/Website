@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Profile • Cazza</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="page-profile">
+
+  <header id="topNav" class="top-nav">
+    <div class="branding">
+      <!-- CHANGED: link points to index.html so it navigates away on profile -->
+      <a href="index.html" id="logoBtn" aria-label="Go to Home">
+        <img src="pngs/Logo1.png" alt="Cazza Logo" class="logo">
+      </a>
+    </div>
+
+    <div class="nav-icons">
+      <button id="menuBtn" class="menu-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="userMenu">☰</button>
+
+      <div aria-labelledby="menuBtn" class="menu-popover" hidden id="userMenu" role="menu">
+        <!-- NEW: Back to Home item -->
+        <button id="menuHome" role="menuitem" type="button">Home</button>
+
+        <button hidden id="menuProfile" role="menuitem" type="button">My profile</button>
+        <button id="menuLogin" role="menuitem" type="button">Log in</button>
+        <button id="menuRegister" role="menuitem" type="button">Register</button>
+        <button id="menuLogout" role="menuitem" type="button">Log out</button>
+      </div>
+
+      <button id="userStatus" class="profile-circle" type="button" title="Guest" aria-label="User: Guest">G</button>
+
+      <!-- dialogs unchanged -->
+      <dialog aria-labelledby="inqTitle" aria-modal="true" class="inquire-dialog" id="inquireDialog">
+        <button aria-label="Close" class="dialog-close" form="none" type="button">×</button>
+        <h3 id="inqTitle">Request To Rent</h3>
+        <form class="inq-form" id="inquireForm" method="dialog" novalidate>
+          <div class="input-wrap" data-err="Please enter your contact number.">
+            <label class="visually-hidden" for="inqPhone">Contact Number</label>
+            <input id="inqPhone" name="phone" placeholder="Contact Number" required type="tel" />
+          </div>
+          <div class="input-wrap" data-err="Enter a valid email address.">
+            <label class="visually-hidden" for="inqEmail">Email</label>
+            <input id="inqEmail" name="email" placeholder="Email" type="email" />
+          </div>
+          <div class="input-wrap" data-err="Name is required.">
+            <label class="visually-hidden" for="inqName">Name</label>
+            <input id="inqName" name="name" placeholder="Name" required type="text" />
+          </div>
+          <div class="input-wrap with-icon" data-err="Pick a date.">
+            <label class="visually-hidden" for="inqDate">Preferred Date</label>
+            <input id="inqDate" name="date" required type="date" />
+          </div>
+          <input id="inqRoomId" name="roomId" type="hidden" />
+          <button class="btn primary block" id="inqSubmit" type="submit">Request</button>
+        </form>
+      </dialog>
+
+      <dialog aria-labelledby="authTitle" aria-modal="true" class="login-dialog" id="authDialog">
+        <button aria-label="Close" class="dialog-close" type="button">×</button>
+        <h3 id="authTitle">Account Log In</h3>
+        <form class="auth-form" id="authForm" method="dialog" novalidate>
+          <div class="input-wrap" data-err="Enter a valid phone number or email">
+            <label class="visually-hidden" for="authPhone">Phone or Email</label>
+            <input autocomplete="tel" id="authPhone" inputmode="tel" name="phone" placeholder="Phone number or Email" required type="text" />
+          </div>
+          <div class="input-wrap" data-err="Password is required.">
+            <label class="visually-hidden" for="authPass">Password</label>
+            <input autocomplete="current-password" id="authPass" name="password" placeholder="Password" required type="password" />
+          </div>
+          <button class="btn primary block" id="authSubmit" type="submit">Log In</button>
+          <div aria-label="Register" class="register-row">
+            <span aria-hidden="true" class="line"></span>
+            <button class="link" id="registerBtn" type="button">Create an account</button>
+            <span aria-hidden="true" class="line"></span>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog aria-labelledby="regTitle" aria-modal="true" class="register-dialog" id="registerDialog">
+        <button aria-label="Close" class="dialog-close" type="button">×</button>
+        <h3 id="regTitle">Account Register</h3>
+        <form class="auth-form" id="regForm" method="dialog" novalidate>
+          <div class="input-wrap" data-err="Please enter your name.">
+            <label class="visually-hidden" for="regName">Name</label>
+            <input id="regName" placeholder="Name" required type="text" />
+          </div>
+          <div class="input-wrap" data-err="Enter a valid phone number.">
+            <label class="visually-hidden" for="regPhone">Phone</label>
+            <input autocomplete="tel" id="regPhone" inputmode="tel" name="phone" pattern="^\+?\d{7,}$" placeholder="Phone number" required type="tel" />
+          </div>
+          <div class="input-wrap input-with-action" data-err="Enter the code we sent.">
+            <label class="visually-hidden" for="regCode">Verification Code</label>
+            <input id="regCode" inputmode="numeric" name="code" placeholder="Verification Code" required type="text" />
+            <button aria-controls="regCode" aria-label="Send verification code to phone" class="inline-action" id="regSend" type="button">Send</button>
+          </div>
+          <div class="input-wrap" data-err="Create a password.">
+            <label class="visually-hidden" for="regPass">Password</label>
+            <input autocomplete="new-password" id="regPass" name="password" placeholder="Enter password" required type="password" />
+          </div>
+          <div class="input-wrap" data-err="Re-enter your password.">
+            <label class="visually-hidden" for="regPass2">Re-enter password</label>
+            <input autocomplete="new-password" id="regPass2" name="password_confirm" placeholder="Re-Enter password" required type="password" />
+          </div>
+          <button class="btn primary block" id="regSubmit" type="submit">Register</button>
+          <p class="switch-auth">
+            Already have an account?
+            <button class="link" id="regToLogin" type="button">Login</button>
+          </p>
+        </form>
+      </dialog>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="container" id="profilePage">
+      <h1>Account Information</h1>
+      <div class="profile-card"><!-- JS fills this --></div>
+    </section>
+  </main>
+
+  <script defer src="js/script.js"></script>
+</body>
+</html>

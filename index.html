@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cazza Zamora Residences</title>
+  <link rel="website icon" type="png" href="pngs/IconWeb.png" />
+  <link rel="stylesheet" href="https://unpkg.com/pannellum/build/pannellum.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px;
+      width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px);
+      white-space: nowrap;
+      border: 0;
+      padding: 0;
+      margin: -1px;
+    }
+
+    .menu-sep {
+      border: 0;
+      border-top: 1px solid #eee;
+      margin: .25rem 0;
+    }
+  </style>
+</head>
+
+<body id="top">
+  <header id="topNav" class="top-nav">
+    <div class="branding">
+      <a href="#" id="logoBtn" aria-label="Go to Home">
+        <img src="pngs/Logo1.png" alt="Cazza Logo" class="logo">
+      </a>
+    </div>
+
+    <button id="headerMuteBtn" class="menu-btn" type="button" aria-label="Toggle video sound" aria-pressed="true"
+      title="Toggle sound">
+      <span class="icon muted" aria-hidden="true">🔇</span>
+      <span class="icon unmuted" aria-hidden="true">🔊</span>
+    </button>
+
+    <div class="nav-icons">
+      <button id="menuBtn" class="menu-btn" type="button" aria-haspopup="menu" aria-expanded="false"
+        aria-controls="userMenu">☰</button>
+
+      <div aria-labelledby="menuBtn" class="menu-popover" hidden id="userMenu" role="menu">
+        <button hidden id="menuProfile" role="menuitem" type="button">My profile</button>
+        <button id="menuLogin" role="menuitem" type="button">Log in</button>
+        <button id="menuRegister" role="menuitem" type="button">Register</button>
+        <button id="menuLogout" role="menuitem" type="button">Log out</button>
+      </div>
+
+      <button id="userStatus" class="profile-circle" type="button" title="Guest" aria-label="User: Guest">G</button>
+
+      <dialog aria-labelledby="inqTitle" aria-modal="true" class="inquire-dialog" id="inquireDialog">
+        <button aria-label="Close" class="dialog-close" form="none" type="button">×</button>
+        <h3 id="inqTitle">Request To Rent</h3>
+
+        <form class="inq-form" id="inquireForm" method="dialog" novalidate>
+          <div class="input-wrap" data-err="Please enter your contact number.">
+            <label class="visually-hidden" for="inqPhone">Contact Number</label>
+            <input id="inqPhone" name="phone" placeholder="Contact Number" required type="tel" />
+          </div>
+          <div class="input-wrap" data-err="Enter a valid email address.">
+            <label class="visually-hidden" for="inqEmail">Email</label>
+            <input id="inqEmail" name="email" placeholder="Email" type="email" />
+          </div>
+          <div class="input-wrap" data-err="Name is required.">
+            <label class="visually-hidden" for="inqName">Name</label>
+            <input id="inqName" name="name" placeholder="Name" required type="text" />
+          </div>
+          <div class="input-wrap with-icon" data-err="Pick a date.">
+            <label class="visually-hidden" for="inqDate">Preferred Date</label>
+            <input id="inqDate" name="date" required type="date" />
+          </div>
+          <input id="inqRoomId" name="roomId" type="hidden" />
+          <button class="btn primary block" id="inqSubmit" type="submit">Request</button>
+        </form>
+      </dialog>
+
+      <dialog aria-labelledby="authTitle" aria-modal="true" class="login-dialog" id="authDialog">
+        <button aria-label="Close" class="dialog-close" type="button">×</button>
+        <h3 id="authTitle">Account Log In</h3>
+        <form class="auth-form" id="authForm" method="dialog" novalidate>
+          <div class="input-wrap" data-err="Enter a valid phone number or email">
+            <label class="visually-hidden" for="authPhone">Phone or Email</label>
+            <input autocomplete="tel" id="authPhone" inputmode="tel" name="phone" placeholder="Phone number or Email"
+              required type="text" />
+          </div>
+          <div class="input-wrap" data-err="Password is required.">
+            <label class="visually-hidden" for="authPass">Password</label>
+            <input autocomplete="current-password" id="authPass" name="password" placeholder="Password" required
+              type="password" />
+          </div>
+          <button class="btn primary block" id="authSubmit" type="submit">Log In</button>
+          <div aria-label="Register" class="register-row">
+            <span aria-hidden="true" class="line"></span>
+            <button class="link" id="registerBtn" type="button">Create an account</button>
+            <span aria-hidden="true" class="line"></span>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog aria-labelledby="regTitle" aria-modal="true" class="register-dialog" id="registerDialog">
+        <button aria-label="Close" class="dialog-close" type="button">×</button>
+        <h3 id="regTitle">Account Register</h3>
+        <form class="auth-form" id="regForm" method="dialog" novalidate>
+          <div class="input-wrap" data-err="Please enter your name.">
+            <label class="visually-hidden" for="regName">Name</label>
+            <input id="regName" placeholder="Name" required type="text" />
+          </div>
+          <div class="input-wrap" data-err="Enter a valid phone number.">
+            <label class="visually-hidden" for="regPhone">Phone</label>
+            <input autocomplete="tel" id="regPhone" inputmode="tel" name="phone" pattern="^\+?\d{7,}$"
+              placeholder="Phone number" required type="tel" />
+          </div>
+          <div class="input-wrap input-with-action" data-err="Enter the code we sent.">
+            <label class="visually-hidden" for="regCode">Verification Code</label>
+            <input id="regCode" inputmode="numeric" name="code" placeholder="Verification Code" required type="text" />
+            <button aria-controls="regCode" aria-label="Send verification code to phone" class="inline-action"
+              id="regSend" type="button">Send</button>
+          </div>
+          <div class="input-wrap" data-err="Create a password.">
+            <label class="visually-hidden" for="regPass">Password</label>
+            <input autocomplete="new-password" id="regPass" name="password" placeholder="Enter password" required
+              type="password" />
+          </div>
+          <div class="input-wrap" data-err="Re-enter your password.">
+            <label class="visually-hidden" for="regPass2">Re-enter password</label>
+            <input autocomplete="new-password" id="regPass2" name="password_confirm" placeholder="Re-Enter password"
+              required type="password" />
+          </div>
+          <button class="btn primary block" id="regSubmit" type="submit">Register</button>
+          <p class="switch-auth">
+            Already have an account?
+            <button class="link" id="regToLogin" type="button">Login</button>
+          </p>
+        </form>
+      </dialog>
+    </div>
+  </header>
+
+  <nav id="searchBar" class="search-bar" aria-label="Primary">
+    <button id="homeBtn" class="active" type="button">Home</button>
+    <button id="roomBtn" type="button">Room Available</button>
+    <button id="faqsBtn" type="button">FAQs</button>
+  </nav>
+
+  <main id="main">
+    <section class="hero-image" id="hero" aria-label="Hero">
+      <video id="heroVideo" class="hero-media" autoplay muted loop playsinline preload="auto"
+        controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture>
+        <source src="pngs/cazzaVideose.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-controls">
+        <button id="heroMuteBtn" class="mute-btn" type="button" aria-label="Unmute video" aria-pressed="true"
+          title="Toggle sound">
+          <span class="icon muted" aria-hidden="true">🔇</span>
+          <span class="icon unmuted" aria-hidden="true">🔊</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="home" class="content-section" aria-labelledby="homeTitle">
+      <div class="container">
+        <h2 id="homeTitle">Welcome to Cazza Zamora Residences</h2>
+        <p>Discover peaceful and affordable living at the heart of the city. Explore available rooms and unit types
+          easily.</p>
+      </div>
+    </section>
+
+    <section id="building-info" class="content-section building-info" aria-labelledby="buildingInfoTitle">
+      <div class="container">
+        <h2 id="buildingInfoTitle" class="bi-heading">About the Building</h2>
+
+        <div class="bi-row">
+          <div class="bi-text reveal-left">
+            <h3>Modern Living Spaces</h3>
+            <p>At Cazza Zamora Residences, each unit is designed for comfort and convenience. Spacious layouts, natural
+              light, and smart ventilation make it easy to focus, relax, and feel at home.</p>
+          </div>
+          <div class="bi-image reveal-right">
+            <img src="pngs/cazza.jpg" alt="Modern room interior">
+          </div>
+        </div>
+
+        <div class="bi-row bi-row--flip">
+          <div class="bi-image reveal-left">
+            <img src="pngs/moreP.jpg" alt="Shared community space">
+          </div>
+          <div class="bi-text reveal-right">
+            <h3>Community & Accessibility</h3>
+            <p>Located in the heart of the city, our residence is close to schools, transport, and daily essentials.
+              Enjoy privacy when you want it and a supportive community when you need it.</p>
+          </div>
+        </div>
+
+        <div class="bi-cards">
+          <article class="bi-card reveal-up">
+            <h4>24/7 Security</h4>
+            <p>Guarded entry and CCTV in common areas for peace of mind.</p>
+          </article>
+          <article class="bi-card reveal-up">
+            <h4>Fast Wi-Fi</h4>
+            <p>Reliable internet in rooms and study spaces.</p>
+          </article>
+          <article class="bi-card reveal-up">
+            <h4>Prime Location</h4>
+            <p>Walking distance to schools, transport, and essentials.</p>
+          </article>
+        </div>
+
+        <div class="bi-cta reveal-up">
+          <a href="#rooms" class="btn-brand">Explore Rooms</a>
+          <a href="#faqs" class="btn-ghost">View FAQs</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="content-section testimonials" aria-labelledby="testimonialsTitle">
+      <div class="container">
+        <div class="t-grid">
+          <div class="t-left">
+            <span class="t-pill">Client Reviews</span>
+            <h2 id="testimonialsTitle" class="t-title">What Our <span>Clients Say</span></h2>
+            <p class="t-lead">Don’t just take our word for it. Here’s what residents and families say about living at
+              Cazza Zamora Residences.</p>
+
+            <div class="t-stats">
+              <div class="t-stat">
+                <div class="t-value">4.9/5</div>
+                <div class="t-label">Average Rating</div>
+              </div>
+              <div class="t-stat">
+                <div class="t-value">98%</div>
+                <div class="t-label">Customer Satisfaction</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="t-right">
+            <article class="t-card reveal">
+              <div class="t-stars" aria-label="5 star rating">
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+              </div>
+              <p class="t-quote">“Quiet, safe, and very convenient. The admin was responsive and the rooms are
+                well-maintained.”</p>
+              <div class="t-author">
+                <div class="name">Sarah Johnson</div>
+                <div class="role">Happy Resident</div>
+              </div>
+            </article>
+
+            <article class="t-card reveal">
+              <div class="t-stars" aria-label="5 star rating">
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+              </div>
+              <p class="t-quote">“Great location near transport and groceries. The staff really made our move-in
+                effortless.”</p>
+              <div class="t-author">
+                <div class="name">Michael Chen</div>
+                <div class="role">Parent / Guardian</div>
+              </div>
+            </article>
+
+            <article class="t-card reveal">
+              <div class="t-stars" aria-label="5 star rating">
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+                <svg viewBox="0 0 24 24" class="star">
+                  <path d="M12 3.5l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 18.8 6.2 21.4l1.1-6.5L2.6 10.3l6.5-.9L12 3.5z" />
+                </svg>
+              </div>
+              <p class="t-quote">“As a first-time renter, I felt supported throughout the process. Highly recommended!”
+              </p>
+              <div class="t-author">
+                <div class="name">Alyssa Santos</div>
+                <div class="role">First-time Renter</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rooms" class="content-section" aria-labelledby="roomsTitle">
+      <div class="container">
+        <h2 id="roomsTitle">Listings</h2>
+
+        <div class="filters-and-rooms">
+          <div class="room-filters" aria-label="Filters">
+            <div class="filter-group">
+              <label for="unitType">Unit Type:</label>
+              <select id="unitType">
+                <option value="all">All</option>
+                <option value="studio">Studio</option>
+                <option value="dorm">Dorm</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label class="switch-container" for="availabilityToggle">
+                <input type="checkbox" id="availabilityToggle">
+                <span class="slider" aria-hidden="true"></span>
+                <span class="label-text" id="availabilityLabel">Show All</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="room-list" id="roomList" aria-live="polite"></div>
+
+          <section id="roomPanel" class="room-panel" aria-hidden="true" aria-labelledby="roomPanelTitle">
+            <div class="room-panel__bar">
+              <h2 class="room-title" id="roomPanelTitle">Room</h2>
+              <button class="room-close" type="button" aria-label="Close">×</button>
+            </div>
+
+            <div class="room-panel__content">
+              <aside class="room-info" aria-label="Unit details">
+                <h3 class="unit-title">Unit Details</h3>
+                <dl class="kv"></dl>
+                <p class="desc"></p>
+                <p class="adv"></p>
+                <button class="btn-inquire" type="button">Inquire</button>
+              </aside>
+
+              <figure class="room-hero">
+                <img class="hero-img" src="" alt="">
+                <div id="panoViewer" class="pano-viewer" aria-hidden="true"></div>
+                <figcaption class="muted">Tap a thumbnail →</figcaption>
+              </figure>
+
+              <nav class="thumbs" aria-label="Gallery"></nav>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section id="faqs" class="content-section" style="display:none;" aria-labelledby="faqsTitle">
+      <div class="container">
+        <h2 id="faqsTitle">FAQs</h2>
+        <p>Explore the various unit types offered in our residence.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" aria-label="Footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-row">
+            <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 11.5L12 4l9 7.5v7.5a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1v-7.5z" fill="none"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <h3 class="footer-title">Cazza Zamora<br>Residences</h3>
+          </div>
+          <p class="footer-blurb">Your trusted partner in finding the perfect residential property.</p>
+        </div>
+
+        <nav class="footer-col" aria-label="Services">
+          <h4 class="footer-heading">Services</h4>
+          <ul class="footer-list">
+            <li><a class="footer-link" href="#">Studio Apartments</a></li>
+            <li><a class="footer-link" href="#">Dorm Rooms</a></li>
+            <li><a class="footer-link" href="#">Shared Housing</a></li>
+            <li><a class="footer-link" href="#">Property Management</a></li>
+          </ul>
+        </nav>
+
+        <nav class="footer-col" aria-label="Company">
+          <h4 class="footer-heading">Company</h4>
+          <ul class="footer-list">
+            <li><a class="footer-link" href="#home">About Us</a></li>
+            <li><a class="footer-link" href="#home">Our Team</a></li>
+            <li><a class="footer-link" href="#rooms">Contact</a></li>
+            <li><a class="footer-link" href="#faqs">FAQs</a></li>
+          </ul>
+        </nav>
+
+        <nav class="footer-col" aria-label="Follow Us">
+          <h4 class="footer-heading">Follow Us</h4>
+          <ul class="footer-list">
+            <li><a class="footer-link" href="https://www.facebook.com/cazzazamoraresidences" target="_blank"
+                rel="noopener">Facebook</a></li>
+            <li><a class="footer-link" href="#" aria-disabled="true">Twitter</a></li>
+            <li><a class="footer-link" href="#" aria-disabled="true">LinkedIn</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <hr class="footer-sep">
+      <p class="footer-copy">© 2024 Cazza Zamora Residences. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Supabase UMD CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+
+  <!-- Centralized helper -->
+  <script src="js/auth.js"></script>
+
+  <!-- One-liner: if logged-in user is admin/staff, redirect to admin panel -->
+  <script>auth.installFrontPageRedirects({ adminPath: "administration.html" });</script>
+
+  <script src="https://unpkg.com/pannellum/build/pannellum.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
